@@ -240,8 +240,14 @@ function addLoadingMessage() {
 }
 
 function getCurrentTab(callback) {
-    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-        callback(tabs[0]);
+    // Get the currently focused window
+    chrome.windows.getLastFocused((focusedWindow) => {
+        // Get the active tab in that window
+        chrome.tabs.query({ active: true, windowId: focusedWindow.id }, (tabs) => {
+            if (tabs.length > 0 && tabs[0].url && !tabs[0].url.startsWith('chrome://')) {
+                callback(tabs[0]);
+            }
+        });
     });
 }
 
