@@ -58,16 +58,36 @@ document.addEventListener('DOMContentLoaded', function() {
       };
       console.log('🟢 Request body:', requestBody);
 
-      console.log('🟢 Sending fetch request to Claude API...');
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01'
-        },
-        body: JSON.stringify(requestBody)
+      // Send a message to content script about the API request
+      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+      await chrome.tabs.sendMessage(tab.id, {
+        action: 'log',
+        message: '🌐 Sending request to Claude API...'
       });
+
+      console.log('🟢 Sending fetch request to Claude API...');
+      let response;
+      try {
+        response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01'
+          },
+          body: JSON.stringify(requestBody)
+        });
+      } catch (networkError) {
+        const errorMsg = `Network error: ${networkError.message}`;
+        console.error('🔴', errorMsg);
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'log',
+          message: '❌ ' + errorMsg,
+          type: 'error'
+        });
+        throw networkError;
+      }
+
       console.log('🟢 Received response:', { 
         status: response.status, 
         ok: response.ok 
@@ -75,20 +95,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (!response.ok) {
         const errorText = await response.text();
-        console.log('🔴 Response not OK. Error text:', errorText);
-        throw new Error(`HTTP error! status: ${response.status}, body: ${errorText}`);
+        const errorMsg = `HTTP error! status: ${response.status}, body: ${errorText}`;
+        console.error('🔴', errorMsg);
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'log',
+          message: '❌ ' + errorMsg,
+          type: 'error'
+        });
+        throw new Error(errorMsg);
       }
 
+      await chrome.tabs.sendMessage(tab.id, {
+        action: 'log',
+        message: '✅ Received response from Claude API'
+      });
+
       console.log('🟢 Parsing response JSON');
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (jsonError) {
+        const errorMsg = `Failed to parse JSON response: ${jsonError.message}`;
+        console.error('🔴', errorMsg);
+        await chrome.tabs.sendMessage(tab.id, {
+          action: 'log',
+          message: '❌ ' + errorMsg,
+          type: 'error'
+        });
+        throw jsonError;
+      }
+
       console.log('🟢 Claude response data:', data);
-      
       const generatedCode = data.content[0].text;
       console.log('🟢 Generated code:', generatedCode);
-
-      console.log('🟢 Getting active tab');
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      console.log('🟢 Active tab:', tab);
+      
+      await chrome.tabs.sendMessage(tab.id, {
+        action: 'log',
+        message: '📝 Generated code from Claude response'
+      });
 
       console.log('🟢 Sending code to content script');
       try {

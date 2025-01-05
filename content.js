@@ -102,7 +102,13 @@ setTimeout(() => {
 // Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log('Message received in content script:', request);
-    visualLog('📥 Received message: ' + JSON.stringify(request));
+    
+    if (request.action === 'log') {
+        // Handle log messages
+        visualLog(request.message, request.type || 'info');
+        sendResponse({ success: true });
+        return true;
+    }
     
     if (request.action === 'executeCode') {
         visualLog('⚡ Executing code: ' + request.code);
@@ -124,8 +130,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;  // Keep the message channel open for the async response
     }
     
-    visualLog('⚠️ Unknown action: ' + request.action);
-    console.log('Unknown action received:', request.action);
+    const unknownMsg = '⚠️ Unknown action: ' + request.action;
+    visualLog(unknownMsg, 'error');
+    console.log(unknownMsg);
     sendResponse({ success: false, error: 'Unknown action' });
     return true;  // Keep the message channel open for the async response
 });
