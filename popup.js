@@ -63,6 +63,16 @@ function getAccessibilityTree(element = document.body) {
         
         if (name) properties.name = name;
 
+        // Get class names if present
+        if (node.className && typeof node.className === 'string' && node.className.trim()) {
+            properties.class = node.className.trim();
+        }
+
+        // Get ID if present
+        if (node.id && node.id.trim()) {
+            properties.id = node.id.trim();
+        }
+
         // Get states (only include true values)
         const states = {};
         if (node.hasAttribute('disabled') || node.getAttribute('aria-disabled') === 'true') {
