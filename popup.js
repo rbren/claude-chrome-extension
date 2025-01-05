@@ -3,17 +3,21 @@ function toYAML(obj, indent = 0) {
     const spaces = ' '.repeat(indent);
     
     if (Array.isArray(obj)) {
-        return obj.map(item => spaces + '- ' + toYAML(item, indent + 2)).join('\n');
+        if (obj.length === 0) return '[]';
+        return '\n' + obj.map(item => `${spaces}- ${toYAML(item, indent + 2).trimStart()}`).join('\n');
     }
     
     if (typeof obj === 'object') {
-        return Object.entries(obj)
-            .filter(([_, v]) => v !== null && v !== undefined && v !== false)
+        const entries = Object.entries(obj)
+            .filter(([_, v]) => v !== null && v !== undefined && v !== false);
+        if (entries.length === 0) return '{}';
+        return entries
             .map(([k, v]) => {
-                if (typeof v === 'object' && !Array.isArray(v)) {
-                    return `${spaces}${k}:\n${toYAML(v, indent + 2)}`;
+                const valueStr = toYAML(v, indent + 2);
+                if (typeof v === 'object') {
+                    return `${spaces}${k}:${valueStr}`;
                 }
-                return `${spaces}${k}: ${toYAML(v, indent + 2)}`;
+                return `${spaces}${k}: ${valueStr}`;
             })
             .join('\n');
     }
