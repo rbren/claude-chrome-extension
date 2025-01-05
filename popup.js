@@ -1,53 +1,64 @@
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('🟢 Popup loaded');
-  
+async function sendLog(tabId, message, type = 'info') {
+  try {
+    await chrome.tabs.sendMessage(tabId, {
+      action: 'log',
+      message,
+      type
+    });
+  } catch (error) {
+    console.error('Failed to send log:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async function() {
   const apiKeyInput = document.getElementById('apiKey');
   const userInput = document.getElementById('userInput');
   const executeButton = document.getElementById('executeButton');
   
-  console.log('🟢 DOM elements found:', { 
-    apiKeyInput: !!apiKeyInput, 
-    userInput: !!userInput, 
-    executeButton: !!executeButton 
-  });
+  // Get active tab for logging
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  await sendLog(tab.id, '🟢 Popup opened');
+  
+  if (apiKeyInput && userInput && executeButton) {
+    await sendLog(tab.id, '🟢 DOM elements initialized');
+  } else {
+    await sendLog(tab.id, '🔴 Failed to find DOM elements', 'error');
+    return;
+  }
 
   // Load saved API key
-  chrome.storage.local.get(['claudeApiKey'], function(result) {
-    console.log('🟢 Loaded API key from storage:', result.claudeApiKey ? '(exists)' : '(none)');
+  chrome.storage.local.get(['claudeApiKey'], async function(result) {
+    await sendLog(tab.id, '🔑 API key from storage: ' + (result.claudeApiKey ? '(exists)' : '(none)'));
     if (result.claudeApiKey) {
       apiKeyInput.value = result.claudeApiKey;
     }
   });
 
   // Save API key when changed
-  apiKeyInput.addEventListener('change', function() {
-    console.log('🟢 Saving new API key to storage');
+  apiKeyInput.addEventListener('change', async function() {
+    await sendLog(tab.id, '💾 Saving new API key to storage');
     chrome.storage.local.set({ claudeApiKey: apiKeyInput.value });
   });
 
   executeButton.addEventListener('click', async function() {
-    console.log('🟢 Execute button clicked');
+    await sendLog(tab.id, '🔵 Execute button clicked');
     
     const apiKey = apiKeyInput.value;
     const prompt = userInput.value;
-    console.log('🟢 Input values:', { 
-      apiKeyExists: !!apiKey, 
-      promptLength: prompt?.length,
-      prompt: prompt 
-    });
+    await sendLog(tab.id, `📝 Prompt length: ${prompt?.length || 0} characters`);
 
     if (!apiKey || !prompt) {
-      console.log('🔴 Missing required inputs');
+      await sendLog(tab.id, '🔴 Missing API key or prompt', 'error');
       alert('Please provide both API key and instructions');
       return;
     }
 
     executeButton.disabled = true;
     executeButton.textContent = 'Processing...';
-    console.log('🟢 Button disabled and set to Processing...');
+    await sendLog(tab.id, '⏳ Processing request...');
 
     try {
-      console.log('🟢 Preparing API request to Claude');
+      await sendLog(tab.id, '🎯 Preparing Claude API request');
       const requestBody = {
         model: 'claude-3-opus-20240229',
         max_tokens: 4096,
@@ -56,16 +67,9 @@ document.addEventListener('DOMContentLoaded', function() {
           content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
         }]
       };
-      console.log('🟢 Request body:', requestBody);
 
-      // Send a message to content script about the API request
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      await chrome.tabs.sendMessage(tab.id, {
-        action: 'log',
-        message: '🌐 Sending request to Claude API...'
-      });
+      await sendLog(tab.id, '🌐 Sending request to Claude API...');
 
-      console.log('🟢 Sending fetch request to Claude API...');
       let response;
       try {
         response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -79,105 +83,76 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       } catch (networkError) {
         const errorMsg = `Network error: ${networkError.message}`;
-        console.error('🔴', errorMsg);
-        await chrome.tabs.sendMessage(tab.id, {
-          action: 'log',
-          message: '❌ ' + errorMsg,
-          type: 'error'
-        });
+        await sendLog(tab.id, '❌ ' + errorMsg, 'error');
         throw networkError;
       }
 
-      console.log('🟢 Received response:', { 
-        status: response.status, 
-        ok: response.ok 
-      });
+      await sendLog(tab.id, `📡 Response status: ${response.status} (${response.ok ? 'OK' : 'Error'})`);
 
       if (!response.ok) {
         const errorText = await response.text();
         const errorMsg = `HTTP error! status: ${response.status}, body: ${errorText}`;
-        console.error('🔴', errorMsg);
-        await chrome.tabs.sendMessage(tab.id, {
-          action: 'log',
-          message: '❌ ' + errorMsg,
-          type: 'error'
-        });
+        await sendLog(tab.id, '❌ ' + errorMsg, 'error');
         throw new Error(errorMsg);
       }
 
-      await chrome.tabs.sendMessage(tab.id, {
-        action: 'log',
-        message: '✅ Received response from Claude API'
-      });
+      await sendLog(tab.id, '✅ Received response from Claude API');
 
-      console.log('🟢 Parsing response JSON');
       let data;
       try {
+        await sendLog(tab.id, '🔍 Parsing JSON response...');
         data = await response.json();
       } catch (jsonError) {
         const errorMsg = `Failed to parse JSON response: ${jsonError.message}`;
-        console.error('🔴', errorMsg);
-        await chrome.tabs.sendMessage(tab.id, {
-          action: 'log',
-          message: '❌ ' + errorMsg,
-          type: 'error'
-        });
+        await sendLog(tab.id, '❌ ' + errorMsg, 'error');
         throw jsonError;
       }
 
-      console.log('🟢 Claude response data:', data);
       const generatedCode = data.content[0].text;
-      console.log('🟢 Generated code:', generatedCode);
-      
-      await chrome.tabs.sendMessage(tab.id, {
-        action: 'log',
-        message: '📝 Generated code from Claude response'
-      });
+      await sendLog(tab.id, '📝 Generated code from Claude response');
+      await sendLog(tab.id, '⚡ Sending code to content script for execution');
 
-      console.log('🟢 Sending code to content script');
       try {
         const result = await new Promise((resolve, reject) => {
           chrome.tabs.sendMessage(tab.id, {
             action: 'executeCode',
             code: generatedCode
           }, response => {
-            console.log('🟢 Got response from content script:', response);
             if (chrome.runtime.lastError) {
-              console.error('🔴 Chrome runtime error:', chrome.runtime.lastError);
               reject(chrome.runtime.lastError);
             } else {
               resolve(response);
             }
           });
         });
-        console.log('🟢 Content script execution result:', result);
+        await sendLog(tab.id, '✨ Code execution complete');
       } catch (error) {
-        console.error('🔴 Error sending message to content script:', error);
+        await sendLog(tab.id, '❌ Failed to execute code: ' + error.message, 'error');
         throw error;
       }
 
       executeButton.textContent = 'Success!';
-      console.log('🟢 Set button to Success');
+      await sendLog(tab.id, '🎉 Operation completed successfully');
       
-      setTimeout(() => {
+      setTimeout(async () => {
         executeButton.disabled = false;
         executeButton.textContent = 'Generate and Execute JavaScript';
-        console.log('🟢 Reset button state');
+        await sendLog(tab.id, '🔄 Ready for next request');
       }, 2000);
 
     } catch (error) {
-      console.error('🔴 Top-level error:', error);
-      executeButton.textContent = 'Error! Check console';
+      await sendLog(tab.id, '💥 Operation failed: ' + error.message, 'error');
+      executeButton.textContent = 'Error! Check logs';
       executeButton.style.backgroundColor = '#ff4444';
       
-      setTimeout(() => {
+      setTimeout(async () => {
         executeButton.disabled = false;
         executeButton.textContent = 'Generate and Execute JavaScript';
         executeButton.style.backgroundColor = '';
-        console.log('🟢 Reset button after error');
+        await sendLog(tab.id, '🔄 Ready to try again');
       }, 3000);
     }
   });
   
-  console.log('🟢 Popup initialization complete');
+  await sendLog(tab.id, '✅ Popup initialization complete');
 });
