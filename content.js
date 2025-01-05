@@ -1,13 +1,29 @@
 console.log('🟢 Content script loaded - ' + new Date().toISOString());
 
 // Wait for DOM to be ready
-function initializeLogging() {
-    console.log('Initializing logging overlay');
+function initializeUI() {
+    // Create toggle button
+    const toggleButton = document.createElement('div');
+    toggleButton.id = 'claude-extension-toggle';
+    toggleButton.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 20px;
+        height: 20px;
+        background: #00ff00;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 2147483647;
+        box-shadow: 0 0 10px rgba(0,255,0,0.5);
+        transition: all 0.3s ease;
+    `;
+    toggleButton.title = 'Toggle Claude Console';
     
-    // Create a visible log element
-    const logDiv = document.createElement('div');
-    logDiv.id = 'claude-extension-log';
-    logDiv.style.cssText = `
+    // Create console UI
+    const consoleUI = document.createElement('div');
+    consoleUI.id = 'claude-extension-console';
+    consoleUI.style.cssText = `
         position: fixed;
         top: 20px;
         right: 20px;
@@ -20,58 +36,114 @@ function initializeLogging() {
         font-family: monospace;
         font-size: 14px;
         line-height: 1.5;
-        z-index: 2147483647;
-        overflow: auto;
+        z-index: 2147483646;
         border: 2px solid #00ff00;
         box-shadow: 0 0 10px rgba(0,255,0,0.5);
+        display: none;
+        flex-direction: column;
     `;
-    document.body.appendChild(logDiv);
-    console.log('Logging overlay created');
 
-    // Add initial message
-    const initialMessage = document.createElement('div');
-    initialMessage.textContent = '🟢 Claude Extension Log - ' + new Date().toISOString();
-    initialMessage.style.borderBottom = '1px solid #00ff00';
-    initialMessage.style.marginBottom = '10px';
-    initialMessage.style.paddingBottom = '10px';
-    logDiv.appendChild(initialMessage);
-    console.log('Initial message added to overlay');
+    // Create log area
+    const logArea = document.createElement('div');
+    logArea.id = 'claude-extension-log';
+    logArea.style.cssText = `
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #00ff00;
+        border-radius: 5px;
+    `;
 
-    return logDiv;
+    // Create input area
+    const inputArea = document.createElement('div');
+    inputArea.style.cssText = `
+        display: flex;
+        gap: 10px;
+    `;
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.placeholder = 'Enter your prompt...';
+    input.style.cssText = `
+        flex-grow: 1;
+        background: #000000;
+        color: #00ff00;
+        border: 1px solid #00ff00;
+        padding: 8px;
+        border-radius: 5px;
+        font-family: monospace;
+    `;
+
+    const button = document.createElement('button');
+    button.textContent = 'Send';
+    button.style.cssText = `
+        background: #00ff00;
+        color: #000000;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-family: monospace;
+        font-weight: bold;
+    `;
+
+    inputArea.appendChild(input);
+    inputArea.appendChild(button);
+    consoleUI.appendChild(logArea);
+    consoleUI.appendChild(inputArea);
+
+    document.body.appendChild(toggleButton);
+    document.body.appendChild(consoleUI);
+
+    // Add toggle functionality
+    toggleButton.onclick = function() {
+        const isVisible = consoleUI.style.display === 'flex';
+        consoleUI.style.display = isVisible ? 'none' : 'flex';
+        toggleButton.style.transform = isVisible ? 'scale(1)' : 'scale(1.2)';
+    };
+
+    // Add send functionality
+    button.onclick = function() {
+        if (input.value.trim()) {
+            visualLog('🔵 Sending prompt: ' + input.value);
+            sendToLiteLLM(input.value);
+            input.value = '';
+        }
+    };
+
+    input.onkeypress = function(e) {
+        if (e.key === 'Enter' && input.value.trim()) {
+            button.click();
+        }
+    };
+
+    return { logArea, consoleUI, toggleButton };
 }
 
-let logDiv;
+let ui;
+
+// Initialize UI
+function initializeIfNeeded() {
+    if (!document.getElementById('claude-extension-toggle')) {
+        ui = initializeUI();
+    }
+}
 
 // Try to initialize immediately
-logDiv = initializeLogging();
+initializeIfNeeded();
 
-// If that fails, try again when the DOM is ready
-if (!logDiv) {
-    document.addEventListener('DOMContentLoaded', () => {
-        console.log('DOMContentLoaded - trying to initialize logging again');
-        logDiv = initializeLogging();
-    });
-}
+// Try again when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeIfNeeded);
 
-// And try one more time after a short delay
-setTimeout(() => {
-    if (!logDiv || !document.getElementById('claude-extension-log')) {
-        console.log('Delayed initialization of logging');
-        logDiv = initializeLogging();
-    }
-}, 1000);
+// And once more after a delay
+setTimeout(initializeIfNeeded, 1000);
 
 function visualLog(message, type = 'info') {
-    console.log('Attempting to log:', message);
-    
-    // Make sure logDiv exists
-    if (!logDiv || !document.getElementById('claude-extension-log')) {
-        console.log('Log div not found, reinitializing');
-        logDiv = initializeLogging();
-    }
+    const logArea = document.getElementById('claude-extension-log');
+    if (!logArea) return;
     
     const color = type === 'error' ? '#ff4444' : '#00ff00';
-    console.log(message);
     
     const entry = document.createElement('div');
     entry.style.cssText = `
@@ -82,50 +154,84 @@ function visualLog(message, type = 'info') {
         word-wrap: break-word;
     `;
     entry.textContent = new Date().toISOString().split('T')[1].split('.')[0] + ' - ' + message;
-    logDiv.appendChild(entry);
+    logArea.appendChild(entry);
     
     // Scroll to bottom
-    logDiv.scrollTop = logDiv.scrollHeight;
+    logArea.scrollTop = logArea.scrollHeight;
     
     // Keep only last 50 messages
-    while (logDiv.children.length > 50) {
-        logDiv.removeChild(logDiv.firstChild);
+    while (logArea.children.length > 50) {
+        logArea.removeChild(logArea.firstChild);
     }
 }
 
-// Test the visual logging system immediately
-setTimeout(() => {
-    visualLog('🔄 Testing logging system');
-    visualLog('If you see this message in the overlay, logging is working');
-}, 2000);
+async function sendToLiteLLM(prompt) {
+    try {
+        // Get settings from storage
+        const settings = await new Promise(resolve => {
+            chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel'], resolve);
+        });
+
+        if (!settings.litellmKey || !settings.litellmUrl || !settings.litellmModel) {
+            visualLog('❌ Missing LiteLLM settings. Click the extension icon to configure.', 'error');
+            return;
+        }
+
+        visualLog('🌐 Sending request to LiteLLM...');
+        
+        const response = await fetch(settings.litellmUrl + '/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${settings.litellmKey}`
+            },
+            body: JSON.stringify({
+                model: settings.litellmModel,
+                messages: [{
+                    role: 'user',
+                    content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
+                }]
+            })
+        });
+
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(`HTTP ${response.status}: ${text}`);
+        }
+
+        const data = await response.json();
+        const code = data.choices[0].message.content;
+        
+        visualLog('📝 Generated code:');
+        visualLog(code);
+        
+        visualLog('⚡ Executing code...');
+        try {
+            const result = eval(code);
+            visualLog('✅ Code execution result: ' + JSON.stringify(result));
+        } catch (error) {
+            visualLog('❌ Execution error: ' + error.toString(), 'error');
+        }
+    } catch (error) {
+        visualLog('❌ Error: ' + error.toString(), 'error');
+    }
+}
 
 // Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('Message received in content script:', { 
-        action: request.action,
-        sender: sender,
-        time: new Date().toISOString()
-    });
-    
     if (request.action === 'log') {
-        console.log('Handling log message:', request.message);
         visualLog(request.message, request.type || 'info');
-        console.log('Log message handled');
         sendResponse({ success: true });
         return true;
     }
     
     if (request.action === 'executeCode') {
-        console.log('Handling executeCode message');
         visualLog('⚡ Executing code: ' + request.code);
         try {
-            console.log('Evaluating code...');
             const result = eval(request.code);
-            console.log('Code evaluation result:', result);
             visualLog('✅ Code execution result: ' + JSON.stringify(result));
             sendResponse({ success: true, result });
         } catch (error) {
-            console.error('Code evaluation error:', error);
             const errorMsg = '❌ Execution error: ' + error.toString();
             visualLog(errorMsg, 'error');
             sendResponse({ success: false, error: error.toString() });
@@ -133,9 +239,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
     
-    console.log('Unknown action received:', request.action);
-    const unknownMsg = '⚠️ Unknown action: ' + request.action;
-    visualLog(unknownMsg, 'error');
     sendResponse({ success: false, error: 'Unknown action' });
     return true;
 });

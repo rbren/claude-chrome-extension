@@ -30,14 +30,27 @@
       padding: 5px;
       font-family: monospace;
     }
+    h2 {
+      margin-top: 0;
+      color: #333;
+    }
+    .info {
+      margin-top: 15px;
+      padding: 10px;
+      background: #e8f5e9;
+      border-radius: 5px;
+      color: #2e7d32;
+      font-size: 14px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
+  <h2>LiteLLM Settings</h2>
   <input type="text" id="litellmKey" placeholder="Enter your LiteLLM API key (sk-...)">
   <input type="text" id="litellmUrl" placeholder="Enter LiteLLM URL" value="https://llm-proxy.app.all-hands.dev">
   <input type="text" id="litellmModel" placeholder="Enter LiteLLM model" value="litellm_proxy/claude-3-5-sonnet-20241022">
-  <textarea id="userInput" placeholder="Enter your instructions..."></textarea>
-  <button id="executeButton">Generate and Execute JavaScript</button>
+  <div class="info">Click the green dot in the top-right corner of any webpage to open the console.</div>
   <script src="popup.js"></script>
 </body>
 </html>
