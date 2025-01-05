@@ -113,31 +113,63 @@ function getAccessibilityTree(element = document.body) {
         return true;
     }
 
+    // Function to check if a node is a container that just wraps other elements
+    function isSimpleContainer(node) {
+        if (node.nodeType !== Node.ELEMENT_NODE) return false;
+        
+        // Skip if node has meaningful properties
+        const props = getAccessibleProperties(node);
+        if (Object.keys(props).length > 0) return false;
+
+        // Skip if node has text content directly
+        const hasDirectText = Array.from(node.childNodes).some(child => 
+            child.nodeType === Node.TEXT_NODE && child.textContent.trim());
+        if (hasDirectText) return false;
+
+        return true;
+    }
+
     // Main recursive function to build the tree
     function buildTree(node) {
         if (!shouldIncludeNode(node)) {
             return null;
         }
 
-        // For text nodes, just return the trimmed content
+        // For text nodes, just return the trimmed content if not empty
         if (node.nodeType === Node.TEXT_NODE) {
             const text = node.textContent.trim();
             return text ? { type: 'text', content: text } : null;
         }
 
-        // For element nodes, build the full node structure
+        // Process children first
+        let children = Array.from(node.childNodes)
+            .map(buildTree)
+            .filter(child => child !== null);
+
+        // For simple container elements, just return their children
+        if (isSimpleContainer(node) && children.length > 0) {
+            return children.length === 1 ? children[0] : children;
+        }
+
+        // For element nodes, build the node structure
         const accessibleNode = {
             type: 'element',
             tagName: node.tagName.toLowerCase(),
             ...getAccessibleProperties(node)
         };
 
-        // Recursively process child nodes
-        const children = Array.from(node.childNodes)
-            .map(buildTree)
-            .filter(child => child !== null);
-
+        // Only include children if there are any
         if (children.length > 0) {
+            // If a child is an array (from a simple container), flatten it
+            children = children.flat();
+            // Remove duplicate adjacent text nodes
+            children = children.filter((child, i) => {
+                if (i === 0) return true;
+                if (child.type === 'text' && children[i - 1].type === 'text') {
+                    return child.content !== children[i - 1].content;
+                }
+                return true;
+            });
             accessibleNode.children = children;
         }
 
