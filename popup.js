@@ -70,7 +70,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${litellmKey}`
                     },
-                    body: JSON.stringify(requestBody)
+                    body: JSON.stringify({
+                        model: litellmModel,
+                        messages: [{
+                            role: 'user',
+                            content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
+                        }]
+                    })
                 })
                 .then(response => {
                     if (!response.ok) {
