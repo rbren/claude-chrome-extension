@@ -26,6 +26,15 @@ function toYAML(obj, indent = 0) {
 }
 
 function getAccessibilityTree(element = document.body) {
+    // Function to get direct text content (excluding child elements)
+    function getDirectTextContent(node) {
+        return Array.from(node.childNodes)
+            .filter(child => child.nodeType === Node.TEXT_NODE)
+            .map(child => child.textContent.trim())
+            .filter(text => text)
+            .join(' ');
+    }
+
     // Function to extract key accessibility properties
     function getAccessibleProperties(node) {
         const properties = {};
@@ -34,10 +43,24 @@ function getAccessibilityTree(element = document.body) {
         const role = node.getAttribute('role') || computedRole(node);
         if (role) properties.role = role;
 
-        // Get name
-        const name = node.getAttribute('aria-label') || 
-                    node.getAttribute('alt') || 
-                    node.textContent?.trim();
+        // Get name from explicit attributes first
+        let name = node.getAttribute('aria-label') || node.getAttribute('alt');
+        
+        // Only use text content if:
+        // 1. No explicit name was found
+        // 2. The node has direct text (not just from children)
+        // 3. The node is a leaf element or is meant to aggregate text (like buttons, links)
+        if (!name) {
+            const directText = getDirectTextContent(node);
+            const isLeafOrTextAggregator = 
+                node.children.length === 0 || 
+                ['button', 'a', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(node.tagName.toLowerCase());
+            
+            if (directText && isLeafOrTextAggregator) {
+                name = directText;
+            }
+        }
+        
         if (name) properties.name = name;
 
         // Get states (only include true values)
