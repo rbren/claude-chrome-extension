@@ -101,22 +101,31 @@ setTimeout(() => {
 
 // Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log('Message received in content script:', request);
+    console.log('Message received in content script:', { 
+        action: request.action,
+        sender: sender,
+        time: new Date().toISOString()
+    });
     
     if (request.action === 'log') {
-        // Handle log messages
+        console.log('Handling log message:', request.message);
         visualLog(request.message, request.type || 'info');
+        console.log('Log message handled');
         sendResponse({ success: true });
         return true;
     }
     
     if (request.action === 'executeCode') {
+        console.log('Handling executeCode message');
         visualLog('⚡ Executing code: ' + request.code);
         try {
+            console.log('Evaluating code...');
             const result = eval(request.code);
+            console.log('Code evaluation result:', result);
             visualLog('✅ Code execution result: ' + JSON.stringify(result));
             sendResponse({ success: true, result });
         } catch (error) {
+            console.error('Code evaluation error:', error);
             const errorMsg = '❌ Execution error: ' + error.toString();
             visualLog(errorMsg, 'error');
             sendResponse({ success: false, error: error.toString() });
@@ -124,11 +133,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
     
-    if (request.action !== 'log') {
-        const unknownMsg = '⚠️ Unknown action: ' + request.action;
-        visualLog(unknownMsg, 'error');
-        console.log(unknownMsg);
-    }
-    sendResponse({ success: true });
+    console.log('Unknown action received:', request.action);
+    const unknownMsg = '⚠️ Unknown action: ' + request.action;
+    visualLog(unknownMsg, 'error');
+    sendResponse({ success: false, error: 'Unknown action' });
     return true;
 });

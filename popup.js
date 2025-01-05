@@ -10,27 +10,36 @@ async function sendLog(tabId, message, type = 'info') {
   }
 }
 
+async function getCurrentTab() {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  return tab;
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
+  console.log('Popup loaded');
   const litellmKeyInput = document.getElementById('litellmKey');
   const litellmUrlInput = document.getElementById('litellmUrl');
   const litellmModelInput = document.getElementById('litellmModel');
   const userInput = document.getElementById('userInput');
   const executeButton = document.getElementById('executeButton');
   
-  // Get active tab for logging
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  await sendLog(tab.id, '🟢 Popup opened');
+  // Send initial log to verify messaging works
+  const tab = await getCurrentTab();
+  console.log('Current tab:', tab);
+  try {
+    await sendLog(tab.id, '🟢 Popup opened and ready');
+  } catch (error) {
+    console.error('Failed to send initial log:', error);
+  }
   
-  if (litellmKeyInput && litellmUrlInput && litellmModelInput && userInput && executeButton) {
-    await sendLog(tab.id, '🟢 DOM elements initialized');
-  } else {
-    await sendLog(tab.id, '🔴 Failed to find DOM elements', 'error');
+  if (!litellmKeyInput || !litellmUrlInput || !litellmModelInput || !userInput || !executeButton) {
+    console.error('Failed to find DOM elements');
     return;
   }
 
   // Load saved values
   chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel'], async function(result) {
-    await sendLog(tab.id, '🔑 Loading saved settings...');
+    console.log('Loaded settings:', result);
     if (result.litellmKey) {
       litellmKeyInput.value = result.litellmKey;
     }
@@ -43,22 +52,29 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 
   // Save settings when changed
-  litellmKeyInput.addEventListener('change', async function() {
-    await sendLog(tab.id, '💾 Saving new API key');
+  litellmKeyInput.addEventListener('change', function() {
+    console.log('Saving API key');
     chrome.storage.local.set({ litellmKey: litellmKeyInput.value });
   });
 
-  litellmUrlInput.addEventListener('change', async function() {
-    await sendLog(tab.id, '💾 Saving new URL');
+  litellmUrlInput.addEventListener('change', function() {
+    console.log('Saving URL');
     chrome.storage.local.set({ litellmUrl: litellmUrlInput.value });
   });
 
-  litellmModelInput.addEventListener('change', async function() {
-    await sendLog(tab.id, '💾 Saving new model');
+  litellmModelInput.addEventListener('change', function() {
+    console.log('Saving model');
     chrome.storage.local.set({ litellmModel: litellmModelInput.value });
   });
 
   executeButton.addEventListener('click', async function() {
+    console.log('Execute button clicked');
+    const tab = await getCurrentTab();
+    if (!tab) {
+      console.error('No active tab found');
+      return;
+    }
+    console.log('Active tab:', tab);
     await sendLog(tab.id, '🔵 Execute button clicked');
     
     const litellmKey = litellmKeyInput.value;
