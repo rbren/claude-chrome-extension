@@ -233,7 +233,20 @@ Only provide the code, no explanations.`
             }
 
             const data = await response.json();
-            const code = data.choices[0].message.content;
+            let code = data.choices[0].message.content;
+            
+            // Parse code blocks if present
+            if (code.includes('```javascript')) {
+                const match = code.match(/```javascript\n([\s\S]*?)```/);
+                if (match) {
+                    code = match[1].trim();
+                }
+            } else if (code.includes('```')) {
+                const match = code.match(/```\n?([\s\S]*?)```/);
+                if (match) {
+                    code = match[1].trim();
+                }
+            }
 
             // Execute the code
             executeInTab(code, function(result) {
