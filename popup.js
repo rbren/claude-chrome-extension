@@ -117,6 +117,24 @@ function addMessage(text, type = 'user') {
     messageDiv.textContent = text;
     chatContainer.appendChild(messageDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight;
+    return messageDiv;
+}
+
+function addLoadingMessage() {
+    const chatContainer = document.getElementById('chat-container');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'message loading-message';
+    loadingDiv.innerHTML = `
+        Thinking
+        <div class="loading-dots">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    `;
+    chatContainer.appendChild(loadingDiv);
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+    return loadingDiv;
 }
 
 function getCurrentTab(callback) {
@@ -186,8 +204,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Add user message
+        // Add user message and loading indicator
         addMessage(prompt);
+        const loadingMessage = addLoadingMessage();
         userInput.value = '';
         sendButton.disabled = true;
 
@@ -250,6 +269,9 @@ Only provide the code, no explanations.`
 
             // Execute the code
             executeInTab(code, function(result) {
+                // Remove loading message
+                loadingMessage.remove();
+
                 const response = [
                     'Generated code:\n' + code + '\n',
                     result.success ? 
@@ -263,6 +285,7 @@ Only provide the code, no explanations.`
             });
 
         } catch (error) {
+            loadingMessage.remove();
             addMessage('Error: ' + error.toString(), 'error');
         }
 
