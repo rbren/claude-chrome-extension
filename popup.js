@@ -1,32 +1,38 @@
 function getAccessibilityTree(element = document.body) {
     // Function to extract key accessibility properties
     function getAccessibleProperties(node) {
-        const properties = {
-            role: node.getAttribute('role') || computedRole(node),
-            name: node.getAttribute('aria-label') || 
-                  node.getAttribute('alt') || 
-                  node.textContent?.trim() || '',
-            description: node.getAttribute('aria-description') || '',
-            state: {
-                disabled: node.hasAttribute('disabled') || 
-                         node.getAttribute('aria-disabled') === 'true',
-                hidden: node.getAttribute('aria-hidden') === 'true' ||
-                        getComputedStyle(node).display === 'none',
-                expanded: node.getAttribute('aria-expanded'),
-                checked: node.getAttribute('aria-checked') || 
-                        (node.tagName === 'INPUT' && 
-                         node.type === 'checkbox' && 
-                         node.checked)
-            }
-        };
+        const props = {};
+        
+        // Get role (only if it's explicit or a meaningful implicit role)
+        const role = node.getAttribute('role') || computedRole(node);
+        if (role && !['generic', 'presentation'].includes(role)) {
+            props.role = role;
+        }
 
-        // Only include non-null properties
-        return Object.fromEntries(
-            Object.entries(properties).filter(([_, v]) => 
-                v !== null && v !== '' && 
-                (typeof v !== 'object' || Object.keys(v).length > 0)
-            )
-        );
+        // Get name (prefer shorter identifiers)
+        const name = node.getAttribute('aria-label') || 
+                    node.getAttribute('alt') || 
+                    node.getAttribute('title') ||
+                    (node.textContent?.trim()?.slice(0, 50));
+        if (name) props.name = name;
+
+        // Only include states that are true/present
+        const states = [];
+        if (node.hasAttribute('disabled') || node.getAttribute('aria-disabled') === 'true') {
+            states.push('disabled');
+        }
+        if (node.getAttribute('aria-expanded') === 'true') {
+            states.push('expanded');
+        }
+        if (node.getAttribute('aria-checked') === 'true' || 
+            (node.tagName === 'INPUT' && node.type === 'checkbox' && node.checked)) {
+            states.push('checked');
+        }
+        if (states.length > 0) {
+            props.state = states;
+        }
+
+        return props;
     }
 
     // Function to compute implicit role if none is explicitly set
@@ -65,10 +71,51 @@ function getAccessibilityTree(element = document.body) {
             return false;
         }
 
-        // Skip hidden elements unless they're hidden with aria-hidden
         if (node.nodeType === Node.ELEMENT_NODE) {
+            const tagName = node.tagName.toLowerCase();
             const style = getComputedStyle(node);
+
+            // Skip hidden elements
             if (style.display === 'none' || style.visibility === 'hidden') {
+                return false;
+            }
+
+            // Skip script, style, meta tags
+            if (['script', 'style', 'meta', 'link', 'noscript'].includes(tagName)) {
+                return false;
+            }
+
+            // Skip tracking, analytics, and ad-related elements
+            if (node.id?.toLowerCase().includes('tracking') ||
+                node.id?.toLowerCase().includes('analytics') ||
+                node.id?.toLowerCase().includes('ads') ||
+                node.className?.toLowerCase().includes('tracking') ||
+                node.className?.toLowerCase().includes('analytics') ||
+                node.className?.toLowerCase().includes('ads')) {
+                return false;
+            }
+
+            // Skip elements with no meaningful content or interaction
+            if (!node.hasChildNodes() && 
+                !node.onclick && 
+                !node.getAttribute('role') &&
+                !node.getAttribute('aria-label') &&
+                !node.getAttribute('alt') &&
+                !node.textContent?.trim() &&
+                !['img', 'input', 'button', 'select', 'textarea'].includes(tagName)) {
+                return false;
+            }
+
+            // Skip decorative elements
+            if (node.getAttribute('aria-hidden') === 'true' ||
+                node.getAttribute('role') === 'presentation' ||
+                (tagName === 'img' && node.getAttribute('role') === 'presentation')) {
+                return false;
+            }
+
+            // Skip elements that are too small to be meaningful
+            const rect = node.getBoundingClientRect();
+            if (rect.width < 5 || rect.height < 5) {
                 return false;
             }
         }
@@ -82,23 +129,44 @@ function getAccessibilityTree(element = document.body) {
             return null;
         }
 
-        // For text nodes, just return the trimmed content
+        // For text nodes, just return the trimmed content if it's meaningful
         if (node.nodeType === Node.TEXT_NODE) {
             const text = node.textContent.trim();
-            return text ? { type: 'text', content: text } : null;
+            // Skip very short text or numbers only
+            if (!text || text.length < 3 || /^[\d\s.,]+$/.test(text)) {
+                return null;
+            }
+            return { type: 'text', content: text };
         }
 
         // For element nodes, build the full node structure
         const accessibleNode = {
             type: 'element',
-            tagName: node.tagName.toLowerCase(),
-            ...getAccessibleProperties(node)
+            tagName: node.tagName.toLowerCase()
         };
+
+        // Get accessible properties
+        const props = getAccessibleProperties(node);
+        
+        // Only include properties that have meaningful values
+        if (Object.keys(props).length > 0) {
+            Object.assign(accessibleNode, props);
+        }
 
         // Recursively process child nodes
         const children = Array.from(node.childNodes)
             .map(buildTree)
             .filter(child => child !== null);
+
+        // Skip wrapper elements that only have one child and no meaningful properties
+        if (children.length === 1 && Object.keys(props).length === 0) {
+            return children[0];
+        }
+
+        // Skip empty branches
+        if (children.length === 0 && Object.keys(props).length === 0) {
+            return null;
+        }
 
         if (children.length > 0) {
             accessibleNode.children = children;
