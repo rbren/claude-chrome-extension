@@ -90,23 +90,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       console.log('🟢 Active tab:', tab);
 
-      console.log('🟢 Executing code in tab');
-      const executionResult = await chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: (code) => {
-          console.log('🟢 Inside executeScript, about to eval code:', code);
-          try {
-            const result = eval(code);
-            console.log('🟢 Code execution result:', result);
-            return result;
-          } catch (error) {
-            console.error('🔴 Code execution error:', error);
-            return error.toString();
-          }
-        },
-        args: [generatedCode]
+      console.log('🟢 Sending code to content script');
+      const result = await chrome.tabs.sendMessage(tab.id, {
+        action: 'executeCode',
+        code: generatedCode
       });
-      console.log('🟢 Code execution complete. Result:', executionResult);
+      console.log('🟢 Content script execution result:', result);
 
       executeButton.textContent = 'Success!';
       console.log('🟢 Set button to Success');
