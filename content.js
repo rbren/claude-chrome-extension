@@ -110,29 +110,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
     
-    if (request.action === 'executeCode') {
-        visualLog('⚡ Executing code: ' + request.code);
-        try {
-            // Create a new function to avoid issues with 'use strict' and scope
-            const executeFunction = new Function(request.code);
-            const result = executeFunction();
-            
-            const resultStr = JSON.stringify(result, null, 2);
-            visualLog('✅ Code execution result: ' + resultStr);
-            console.log('Sending response back to popup:', { success: true, result });
-            sendResponse({ success: true, result });
-        } catch (error) {
-            const errorMsg = '❌ Execution error: ' + error.toString();
-            visualLog(errorMsg, 'error');
-            console.error('Error executing code:', error);
-            sendResponse({ success: false, error: error.toString() });
-        }
-        return true;  // Keep the message channel open for the async response
+    if (request.action !== 'log') {
+        const unknownMsg = '⚠️ Unknown action: ' + request.action;
+        visualLog(unknownMsg, 'error');
+        console.log(unknownMsg);
     }
-    
-    const unknownMsg = '⚠️ Unknown action: ' + request.action;
-    visualLog(unknownMsg, 'error');
-    console.log(unknownMsg);
-    sendResponse({ success: false, error: 'Unknown action' });
-    return true;  // Keep the message channel open for the async response
+    sendResponse({ success: true });
+    return true;
 });

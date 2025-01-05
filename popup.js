@@ -131,19 +131,16 @@ document.addEventListener('DOMContentLoaded', async function() {
       await sendLog(tab.id, '⚡ Sending code to content script for execution');
 
       try {
-        const result = await new Promise((resolve, reject) => {
-          chrome.tabs.sendMessage(tab.id, {
-            action: 'executeCode',
-            code: generatedCode
-          }, response => {
-            if (chrome.runtime.lastError) {
-              reject(chrome.runtime.lastError);
-            } else {
-              resolve(response);
-            }
-          });
+        await sendLog(tab.id, '⚡ Executing code via chrome.scripting.executeScript');
+        const results = await chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          func: (code) => {
+            return eval(code);
+          },
+          args: [generatedCode]
         });
-        await sendLog(tab.id, '✨ Code execution complete');
+        const result = results[0].result;
+        await sendLog(tab.id, '✨ Code execution complete. Result: ' + JSON.stringify(result));
       } catch (error) {
         await sendLog(tab.id, '❌ Failed to execute code: ' + error.message, 'error');
         throw error;
