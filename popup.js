@@ -282,7 +282,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // First get the accessibility tree
             const accessibilityTree = await new Promise((resolve) => {
                 chrome.tabs.executeScript({
-                    code: `(${getAccessibilityTree.toString()})();`
+                    code: `
+                        const tree = (${getAccessibilityTree.toString()})();
+                        console.log('Accessibility Tree:', JSON.stringify(tree, null, 2));
+                        console.log('Tree size (chars):', JSON.stringify(tree).length);
+                        console.log('Tree size (tokens, approx):', Math.ceil(JSON.stringify(tree).length / 4));
+                        tree;
+                    `
                 }, function(results) {
                     if (chrome.runtime.lastError) {
                         console.error('Error getting accessibility tree:', chrome.runtime.lastError);
