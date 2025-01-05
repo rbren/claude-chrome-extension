@@ -340,11 +340,22 @@ document.addEventListener('DOMContentLoaded', function() {
                     messages: [{
                         role: 'user',
                         content: `
-Page accessibility tree:
+<ACCESSIBILITY_TREE>
 ${toYAML(accessibilityTree)}
+</ACCESSIBILITY_TREE>
 
+<TASK>
 Generate JavaScript code for this task: ${prompt}
-Only provide the code, no explanations.`
+Only provide the code, no explanations.
+
+The last value in the code will be returned to the user. This is a good place to
+put a message describing what happened with the execution.
+
+Make your JavaScript as general as possible. It should be able to handle ambiguity
+like escaped characters, missing elements, etc.
+</TASK>
+`
+
                     }]
                 })
             });
