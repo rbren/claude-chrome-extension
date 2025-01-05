@@ -104,18 +104,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const data = await response.json();
             const code = data.choices[0].message.content;
 
-            // Show the generated code
-            addMessage('Generated code:', 'system');
-            addMessage(code, 'system');
-
             // Execute the code
-            addMessage('Executing code...', 'system');
             executeInTab(code, function(result) {
-                if (result.success) {
-                    addMessage('Result: ' + JSON.stringify(result.result, null, 2), 'system');
-                } else {
-                    addMessage('Execution error: ' + result.error, 'error');
-                }
+                const response = [
+                    'Generated code:\n' + code + '\n',
+                    result.success ? 
+                        'Result: ' + JSON.stringify(result.result, null, 2) :
+                        'Error: ' + result.error
+                ].join('\n');
+                
+                addMessage(response, result.success ? 'system' : 'error');
                 sendButton.disabled = false;
                 userInput.focus();
             });
