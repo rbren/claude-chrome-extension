@@ -110,6 +110,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
     
+    if (request.action === 'executeCode') {
+        visualLog('⚡ Executing code: ' + request.code);
+        try {
+            const result = eval(request.code);
+            visualLog('✅ Code execution result: ' + JSON.stringify(result));
+            sendResponse({ success: true, result });
+        } catch (error) {
+            const errorMsg = '❌ Execution error: ' + error.toString();
+            visualLog(errorMsg, 'error');
+            sendResponse({ success: false, error: error.toString() });
+        }
+        return true;
+    }
+    
     if (request.action !== 'log') {
         const unknownMsg = '⚠️ Unknown action: ' + request.action;
         visualLog(unknownMsg, 'error');
