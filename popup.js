@@ -13,36 +13,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInput = document.getElementById('userInput');
     const executeButton = document.getElementById('executeButton');
     
-    console.log('Found elements:', {
-        key: !!litellmKeyInput,
-        url: !!litellmUrlInput,
-        model: !!litellmModelInput,
-        input: !!userInput,
-        button: !!executeButton
-    });
-
     // Load saved values
     chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel'], function(result) {
-        console.log('Loaded stored values:', result);
         if (result.litellmKey) litellmKeyInput.value = result.litellmKey;
         if (result.litellmUrl) litellmUrlInput.value = result.litellmUrl;
         if (result.litellmModel) litellmModelInput.value = result.litellmModel;
     });
 
+    // Save values when they change
+    litellmKeyInput.addEventListener('change', function() {
+        chrome.storage.local.set({ litellmKey: litellmKeyInput.value });
+    });
+    litellmUrlInput.addEventListener('change', function() {
+        chrome.storage.local.set({ litellmUrl: litellmUrlInput.value });
+    });
+    litellmModelInput.addEventListener('change', function() {
+        chrome.storage.local.set({ litellmModel: litellmModelInput.value });
+    });
+
     executeButton.onclick = function() {
-        console.log('Button clicked!');
-        
         const litellmKey = litellmKeyInput.value;
         const litellmUrl = litellmUrlInput.value;
         const litellmModel = litellmModelInput.value;
         const prompt = userInput.value;
-
-        console.log('Input values:', {
-            keyLength: litellmKey?.length,
-            url: litellmUrl,
-            model: litellmModel,
-            promptLength: prompt?.length
-        });
 
         if (!litellmKey || !litellmUrl || !litellmModel || !prompt) {
             alert('Please fill in all fields');
@@ -71,21 +64,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // If we got here, messaging works, proceed with the API call
                 const apiUrl = litellmUrl + '/v1/chat/completions';
-                const requestBody = {
-                    model: litellmModel,
-                    messages: [{
-                        role: 'user',
-                        content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
-                    }]
-                };
-                
-                console.log('Making API request to:', apiUrl);
-                console.log('Request body:', requestBody);
-                console.log('Request headers:', {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + litellmKey.substring(0, 4) + '...'
-                });
-
                 fetch(apiUrl, {
                     method: 'POST',
                     headers: {
@@ -95,11 +73,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     body: JSON.stringify(requestBody)
                 })
                 .then(response => {
-                    console.log('Got response:', {
-                        status: response.status,
-                        ok: response.ok,
-                        statusText: response.statusText
-                    });
                     if (!response.ok) {
                         return response.text().then(text => {
                             throw new Error(`HTTP ${response.status}: ${text}`);
@@ -108,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     return response.json();
                 })
                 .then(data => {
-                    console.log('API response:', data);
                     const code = data.choices[0].message.content;
                     
                     // Send code to content script
