@@ -1,29 +1,35 @@
 function getAccessibilityTree(element = document.body) {
     // Function to extract key accessibility properties
     function getAccessibleProperties(node) {
-        const properties = {
-            role: node.getAttribute('role') || computedRole(node),
-            name: node.getAttribute('aria-label') || 
-                  node.getAttribute('alt') || 
-                  node.textContent?.trim() || '',
-            state: {
-                disabled: node.hasAttribute('disabled') || 
-                         node.getAttribute('aria-disabled') === 'true',
-                expanded: node.getAttribute('aria-expanded') === 'true',
-                checked: node.getAttribute('aria-checked') === 'true' || 
-                        (node.tagName === 'INPUT' && 
-                         node.type === 'checkbox' && 
-                         node.checked)
-            }
-        };
+        const properties = {};
 
-        // Only include non-null properties
-        return Object.fromEntries(
-            Object.entries(properties).filter(([_, v]) => 
-                v !== null && v !== '' && 
-                (typeof v !== 'object' || Object.keys(v).length > 0)
-            )
-        );
+        // Get role
+        const role = node.getAttribute('role') || computedRole(node);
+        if (role) properties.role = role;
+
+        // Get name
+        const name = node.getAttribute('aria-label') || 
+                    node.getAttribute('alt') || 
+                    node.textContent?.trim();
+        if (name) properties.name = name;
+
+        // Get states (only include true values)
+        const states = {};
+        if (node.hasAttribute('disabled') || node.getAttribute('aria-disabled') === 'true') {
+            states.disabled = true;
+        }
+        if (node.getAttribute('aria-expanded') === 'true') {
+            states.expanded = true;
+        }
+        if (node.getAttribute('aria-checked') === 'true' || 
+            (node.tagName === 'INPUT' && node.type === 'checkbox' && node.checked)) {
+            states.checked = true;
+        }
+        if (Object.keys(states).length > 0) {
+            properties.state = states;
+        }
+
+        return properties;
     }
 
     // Function to compute implicit role if none is explicitly set
@@ -219,10 +225,34 @@ document.addEventListener('DOMContentLoaded', function() {
             const accessibilityTree = await new Promise((resolve) => {
                 chrome.tabs.executeScript({
                     code: `
+                        function toYAML(obj, indent = 0) {
+                            if (obj === null || obj === undefined) return '';
+                            const spaces = ' '.repeat(indent);
+                            
+                            if (Array.isArray(obj)) {
+                                return obj.map(item => spaces + '- ' + toYAML(item, indent + 2)).join('\\n');
+                            }
+                            
+                            if (typeof obj === 'object') {
+                                return Object.entries(obj)
+                                    .filter(([_, v]) => v !== null && v !== undefined && v !== false)
+                                    .map(([k, v]) => {
+                                        if (typeof v === 'object' && !Array.isArray(v)) {
+                                            return \`\${spaces}\${k}:\\n\${toYAML(v, indent + 2)}\`;
+                                        }
+                                        return \`\${spaces}\${k}: \${toYAML(v, indent + 2)}\`;
+                                    })
+                                    .join('\\n');
+                            }
+                            
+                            return String(obj);
+                        }
+
                         const tree = (${getAccessibilityTree.toString()})();
-                        console.log('Accessibility Tree:', JSON.stringify(tree, null, 2));
-                        console.log('Tree size (chars):', JSON.stringify(tree).length);
-                        console.log('Tree size (tokens, approx):', Math.ceil(JSON.stringify(tree).length / 4));
+                        const yamlTree = toYAML(tree);
+                        console.log('Accessibility Tree (YAML):\\n' + yamlTree);
+                        console.log('Tree size (chars):', yamlTree.length);
+                        console.log('Tree size (tokens, approx):', Math.ceil(yamlTree.length / 4));
                         tree;
                     `
                 }, function(results) {
