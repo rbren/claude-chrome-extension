@@ -1,193 +1,21 @@
-async function sendLog(tabId, message, type = 'info') {
-  try {
-    await chrome.tabs.sendMessage(tabId, {
-      action: 'log',
-      message,
-      type
-    });
-  } catch (error) {
-    console.error('Failed to send log:', error);
-  }
-}
-
-async function getCurrentTab() {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  return tab;
-}
-
-document.addEventListener('DOMContentLoaded', async function() {
-  console.log('Popup loaded');
-  const litellmKeyInput = document.getElementById('litellmKey');
-  const litellmUrlInput = document.getElementById('litellmUrl');
-  const litellmModelInput = document.getElementById('litellmModel');
-  const userInput = document.getElementById('userInput');
-  const executeButton = document.getElementById('executeButton');
-  
-  // Send initial log to verify messaging works
-  const tab = await getCurrentTab();
-  console.log('Current tab:', tab);
-  try {
-    await sendLog(tab.id, '🟢 Popup opened and ready');
-  } catch (error) {
-    console.error('Failed to send initial log:', error);
-  }
-  
-  if (!litellmKeyInput || !litellmUrlInput || !litellmModelInput || !userInput || !executeButton) {
-    console.error('Failed to find DOM elements');
-    return;
-  }
-
-  // Load saved values
-  chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel'], async function(result) {
-    console.log('Loaded settings:', result);
-    if (result.litellmKey) {
-      litellmKeyInput.value = result.litellmKey;
-    }
-    if (result.litellmUrl) {
-      litellmUrlInput.value = result.litellmUrl;
-    }
-    if (result.litellmModel) {
-      litellmModelInput.value = result.litellmModel;
-    }
-  });
-
-  // Save settings when changed
-  litellmKeyInput.addEventListener('change', function() {
-    console.log('Saving API key');
-    chrome.storage.local.set({ litellmKey: litellmKeyInput.value });
-  });
-
-  litellmUrlInput.addEventListener('change', function() {
-    console.log('Saving URL');
-    chrome.storage.local.set({ litellmUrl: litellmUrlInput.value });
-  });
-
-  litellmModelInput.addEventListener('change', function() {
-    console.log('Saving model');
-    chrome.storage.local.set({ litellmModel: litellmModelInput.value });
-  });
-
-  executeButton.addEventListener('click', async function() {
-    console.log('Execute button clicked');
-    const tab = await getCurrentTab();
-    if (!tab) {
-      console.error('No active tab found');
-      return;
-    }
-    console.log('Active tab:', tab);
-    await sendLog(tab.id, '🔵 Execute button clicked');
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Popup loaded');
     
-    const litellmKey = litellmKeyInput.value;
-    const litellmUrl = litellmUrlInput.value;
-    const litellmModel = litellmModelInput.value;
-    const prompt = userInput.value;
-    await sendLog(tab.id, `📝 Prompt length: ${prompt?.length || 0} characters`);
-
-    if (!litellmKey || !litellmUrl || !litellmModel || !prompt) {
-      await sendLog(tab.id, '🔴 Missing required fields', 'error');
-      alert('Please provide all required fields');
-      return;
+    const button = document.getElementById('executeButton');
+    console.log('Found button:', button);
+    
+    if (button) {
+        button.onclick = function() {
+            console.log('Button clicked!');
+            alert('Button clicked!');
+        };
+    } else {
+        console.error('Button not found');
     }
 
-    executeButton.disabled = true;
-    executeButton.textContent = 'Processing...';
-    await sendLog(tab.id, '⏳ Processing request...');
-
-    try {
-      await sendLog(tab.id, '🎯 Preparing LiteLLM request');
-      const requestBody = {
-        model: litellmModel,
-        messages: [{
-          role: 'user',
-          content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
-        }]
-      };
-
-      await sendLog(tab.id, '🌐 Sending request to LiteLLM...');
-
-      let response;
-      try {
-        response = await fetch(litellmUrl + '/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${litellmKey}`
-          },
-          body: JSON.stringify(requestBody)
-        });
-      } catch (networkError) {
-        const errorMsg = `Network error: ${networkError.message}`;
-        await sendLog(tab.id, '❌ ' + errorMsg, 'error');
-        throw networkError;
-      }
-
-      await sendLog(tab.id, `📡 Response status: ${response.status} (${response.ok ? 'OK' : 'Error'})`);
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        const errorMsg = `HTTP error! status: ${response.status}, body: ${errorText}`;
-        await sendLog(tab.id, '❌ ' + errorMsg, 'error');
-        throw new Error(errorMsg);
-      }
-
-      await sendLog(tab.id, '✅ Received response from Claude API');
-
-      let data;
-      try {
-        await sendLog(tab.id, '🔍 Parsing JSON response...');
-        data = await response.json();
-      } catch (jsonError) {
-        const errorMsg = `Failed to parse JSON response: ${jsonError.message}`;
-        await sendLog(tab.id, '❌ ' + errorMsg, 'error');
-        throw jsonError;
-      }
-
-      const generatedCode = data.choices[0].message.content;
-      await sendLog(tab.id, '📝 Generated code from Claude response');
-      await sendLog(tab.id, '⚡ Sending code to content script for execution');
-
-      try {
-        await sendLog(tab.id, '⚡ Sending code to content script');
-        const result = await new Promise((resolve, reject) => {
-          chrome.tabs.sendMessage(tab.id, {
-            action: 'executeCode',
-            code: generatedCode
-          }, response => {
-            if (chrome.runtime.lastError) {
-              reject(chrome.runtime.lastError);
-            } else {
-              resolve(response);
-            }
-          });
-        });
-        await sendLog(tab.id, '✨ Code execution complete. Result: ' + JSON.stringify(result));
-      } catch (error) {
-        await sendLog(tab.id, '❌ Failed to execute code: ' + error.message, 'error');
-        throw error;
-      }
-
-      executeButton.textContent = 'Success!';
-      await sendLog(tab.id, '🎉 Operation completed successfully');
-      
-      setTimeout(async () => {
-        executeButton.disabled = false;
-        executeButton.textContent = 'Generate and Execute JavaScript';
-        await sendLog(tab.id, '🔄 Ready for next request');
-      }, 2000);
-
-    } catch (error) {
-      await sendLog(tab.id, '💥 Operation failed: ' + error.message, 'error');
-      executeButton.textContent = 'Error! Check logs';
-      executeButton.style.backgroundColor = '#ff4444';
-      
-      setTimeout(async () => {
-        executeButton.disabled = false;
-        executeButton.textContent = 'Generate and Execute JavaScript';
-        executeButton.style.backgroundColor = '';
-        await sendLog(tab.id, '🔄 Ready to try again');
-      }, 3000);
-    }
-  });
-  
-  await sendLog(tab.id, '✅ Popup initialization complete');
-});
+    // Test that console.log works
+    setInterval(() => {
+        console.log('Heartbeat:', new Date().toISOString());
+    }, 1000);
+    
+}));
