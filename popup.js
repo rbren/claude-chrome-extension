@@ -1,3 +1,115 @@
+function getAccessibilityTree(element = document.body) {
+    // Function to extract key accessibility properties
+    function getAccessibleProperties(node) {
+        const properties = {
+            role: node.getAttribute('role') || computedRole(node),
+            name: node.getAttribute('aria-label') || 
+                  node.getAttribute('alt') || 
+                  node.textContent?.trim() || '',
+            description: node.getAttribute('aria-description') || '',
+            state: {
+                disabled: node.hasAttribute('disabled') || 
+                         node.getAttribute('aria-disabled') === 'true',
+                hidden: node.getAttribute('aria-hidden') === 'true' ||
+                        getComputedStyle(node).display === 'none',
+                expanded: node.getAttribute('aria-expanded'),
+                checked: node.getAttribute('aria-checked') || 
+                        (node.tagName === 'INPUT' && 
+                         node.type === 'checkbox' && 
+                         node.checked)
+            }
+        };
+
+        // Only include non-null properties
+        return Object.fromEntries(
+            Object.entries(properties).filter(([_, v]) => 
+                v !== null && v !== '' && 
+                (typeof v !== 'object' || Object.keys(v).length > 0)
+            )
+        );
+    }
+
+    // Function to compute implicit role if none is explicitly set
+    function computedRole(node) {
+        const tagRoleMap = {
+            'button': 'button',
+            'a': 'link',
+            'input': node.type === 'text' ? 'textbox' : 
+                     node.type === 'checkbox' ? 'checkbox' : 
+                     node.type === 'radio' ? 'radio' : '',
+            'select': 'combobox',
+            'textarea': 'textbox',
+            'img': 'img',
+            'table': 'table',
+            'ul': 'list',
+            'ol': 'list',
+            'li': 'listitem',
+            'nav': 'navigation',
+            'main': 'main',
+            'header': 'banner',
+            'footer': 'contentinfo',
+            'aside': 'complementary',
+            'article': 'article',
+            'form': 'form',
+            'search': 'search'
+        };
+        
+        return tagRoleMap[node.tagName.toLowerCase()] || '';
+    }
+
+    // Function to check if node should be included in the tree
+    function shouldIncludeNode(node) {
+        // Skip comment nodes and empty text nodes
+        if (node.nodeType === Node.COMMENT_NODE || 
+            (node.nodeType === Node.TEXT_NODE && !node.textContent.trim())) {
+            return false;
+        }
+
+        // Skip hidden elements unless they're hidden with aria-hidden
+        if (node.nodeType === Node.ELEMENT_NODE) {
+            const style = getComputedStyle(node);
+            if (style.display === 'none' || style.visibility === 'hidden') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // Main recursive function to build the tree
+    function buildTree(node) {
+        if (!shouldIncludeNode(node)) {
+            return null;
+        }
+
+        // For text nodes, just return the trimmed content
+        if (node.nodeType === Node.TEXT_NODE) {
+            const text = node.textContent.trim();
+            return text ? { type: 'text', content: text } : null;
+        }
+
+        // For element nodes, build the full node structure
+        const accessibleNode = {
+            type: 'element',
+            tagName: node.tagName.toLowerCase(),
+            ...getAccessibleProperties(node)
+        };
+
+        // Recursively process child nodes
+        const children = Array.from(node.childNodes)
+            .map(buildTree)
+            .filter(child => child !== null);
+
+        if (children.length > 0) {
+            accessibleNode.children = children;
+        }
+
+        return accessibleNode;
+    }
+
+    return buildTree(element);
+}
+
 function addMessage(text, type = 'user') {
     const chatContainer = document.getElementById('chat-container');
     const messageDiv = document.createElement('div');
@@ -80,7 +192,21 @@ document.addEventListener('DOMContentLoaded', function() {
         sendButton.disabled = true;
 
         try {
-            // Make API request
+            // First get the accessibility tree
+            const accessibilityTree = await new Promise((resolve) => {
+                chrome.tabs.executeScript({
+                    code: `(${getAccessibilityTree.toString()})();`
+                }, function(results) {
+                    if (chrome.runtime.lastError) {
+                        console.error('Error getting accessibility tree:', chrome.runtime.lastError);
+                        resolve(null);
+                    } else {
+                        resolve(results[0]);
+                    }
+                });
+            });
+
+            // Make API request with accessibility context
             const response = await fetch(litellmUrlInput.value + '/v1/chat/completions', {
                 method: 'POST',
                 headers: {
@@ -91,7 +217,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     model: litellmModelInput.value,
                     messages: [{
                         role: 'user',
-                        content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
+                        content: `
+Page accessibility tree:
+${JSON.stringify(accessibilityTree, null, 2)}
+
+Generate JavaScript code for this task: ${prompt}
+Only provide the code, no explanations.`
                     }]
                 })
             });
