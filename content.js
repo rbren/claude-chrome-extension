@@ -93,24 +93,39 @@ function visualLog(message, type = 'info') {
     }
 }
 
+// Test the visual logging system immediately
+setTimeout(() => {
+    visualLog('🔄 Testing logging system');
+    visualLog('If you see this message in the overlay, logging is working');
+}, 2000);
+
 // Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  visualLog('📥 Received message: ' + request.action);
-  
-  if (request.action === 'executeCode') {
-    visualLog('⚡ Executing code: ' + request.code);
-    try {
-      const result = eval(request.code);
-      visualLog('✅ Code execution result: ' + JSON.stringify(result));
-      sendResponse({ success: true, result });
-    } catch (error) {
-      const errorMsg = '❌ Execution error: ' + error.toString();
-      visualLog(errorMsg, 'error');
-      sendResponse({ success: false, error: error.toString() });
+    console.log('Message received in content script:', request);
+    visualLog('📥 Received message: ' + JSON.stringify(request));
+    
+    if (request.action === 'executeCode') {
+        visualLog('⚡ Executing code: ' + request.code);
+        try {
+            // Create a new function to avoid issues with 'use strict' and scope
+            const executeFunction = new Function(request.code);
+            const result = executeFunction();
+            
+            const resultStr = JSON.stringify(result, null, 2);
+            visualLog('✅ Code execution result: ' + resultStr);
+            console.log('Sending response back to popup:', { success: true, result });
+            sendResponse({ success: true, result });
+        } catch (error) {
+            const errorMsg = '❌ Execution error: ' + error.toString();
+            visualLog(errorMsg, 'error');
+            console.error('Error executing code:', error);
+            sendResponse({ success: false, error: error.toString() });
+        }
+        return true;  // Keep the message channel open for the async response
     }
-    return true;
-  }
-  
-  visualLog('⚠️ Unknown action: ' + request.action);
-  return true;
+    
+    visualLog('⚠️ Unknown action: ' + request.action);
+    console.log('Unknown action received:', request.action);
+    sendResponse({ success: false, error: 'Unknown action' });
+    return true;  // Keep the message channel open for the async response
 });

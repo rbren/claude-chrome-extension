@@ -91,11 +91,26 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('🟢 Active tab:', tab);
 
       console.log('🟢 Sending code to content script');
-      const result = await chrome.tabs.sendMessage(tab.id, {
-        action: 'executeCode',
-        code: generatedCode
-      });
-      console.log('🟢 Content script execution result:', result);
+      try {
+        const result = await new Promise((resolve, reject) => {
+          chrome.tabs.sendMessage(tab.id, {
+            action: 'executeCode',
+            code: generatedCode
+          }, response => {
+            console.log('🟢 Got response from content script:', response);
+            if (chrome.runtime.lastError) {
+              console.error('🔴 Chrome runtime error:', chrome.runtime.lastError);
+              reject(chrome.runtime.lastError);
+            } else {
+              resolve(response);
+            }
+          });
+        });
+        console.log('🟢 Content script execution result:', result);
+      } catch (error) {
+        console.error('🔴 Error sending message to content script:', error);
+        throw error;
+      }
 
       executeButton.textContent = 'Success!';
       console.log('🟢 Set button to Success');
