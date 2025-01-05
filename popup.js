@@ -1,3 +1,26 @@
+function toYAML(obj, indent = 0) {
+    if (obj === null || obj === undefined) return '';
+    const spaces = ' '.repeat(indent);
+    
+    if (Array.isArray(obj)) {
+        return obj.map(item => spaces + '- ' + toYAML(item, indent + 2)).join('\n');
+    }
+    
+    if (typeof obj === 'object') {
+        return Object.entries(obj)
+            .filter(([_, v]) => v !== null && v !== undefined && v !== false)
+            .map(([k, v]) => {
+                if (typeof v === 'object' && !Array.isArray(v)) {
+                    return `${spaces}${k}:\n${toYAML(v, indent + 2)}`;
+                }
+                return `${spaces}${k}: ${toYAML(v, indent + 2)}`;
+            })
+            .join('\n');
+    }
+    
+    return String(obj);
+}
+
 function getAccessibilityTree(element = document.body) {
     // Function to extract key accessibility properties
     function getAccessibleProperties(node) {
@@ -224,37 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // First get the accessibility tree
             const accessibilityTree = await new Promise((resolve) => {
                 chrome.tabs.executeScript({
-                    code: `
-                        function toYAML(obj, indent = 0) {
-                            if (obj === null || obj === undefined) return '';
-                            const spaces = ' '.repeat(indent);
-                            
-                            if (Array.isArray(obj)) {
-                                return obj.map(item => spaces + '- ' + toYAML(item, indent + 2)).join('\\n');
-                            }
-                            
-                            if (typeof obj === 'object') {
-                                return Object.entries(obj)
-                                    .filter(([_, v]) => v !== null && v !== undefined && v !== false)
-                                    .map(([k, v]) => {
-                                        if (typeof v === 'object' && !Array.isArray(v)) {
-                                            return \`\${spaces}\${k}:\\n\${toYAML(v, indent + 2)}\`;
-                                        }
-                                        return \`\${spaces}\${k}: \${toYAML(v, indent + 2)}\`;
-                                    })
-                                    .join('\\n');
-                            }
-                            
-                            return String(obj);
-                        }
-
-                        const tree = (${getAccessibilityTree.toString()})();
-                        const yamlTree = toYAML(tree);
-                        console.log('Accessibility Tree (YAML):\\n' + yamlTree);
-                        console.log('Tree size (chars):', yamlTree.length);
-                        console.log('Tree size (tokens, approx):', Math.ceil(yamlTree.length / 4));
-                        tree;
-                    `
+                    code: `const tree = (${getAccessibilityTree.toString()})();
+                        tree;`
                 }, function(results) {
                     if (chrome.runtime.lastError) {
                         console.error('Error getting accessibility tree:', chrome.runtime.lastError);
@@ -278,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         role: 'user',
                         content: `
 Page accessibility tree:
-${JSON.stringify(accessibilityTree, null, 2)}
+${toYAML(accessibilityTree)}
 
 Generate JavaScript code for this task: ${prompt}
 Only provide the code, no explanations.`
