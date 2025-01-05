@@ -132,12 +132,19 @@ document.addEventListener('DOMContentLoaded', async function() {
 
       try {
         await sendLog(tab.id, '⚡ Executing code via chrome.scripting.executeScript');
+        // Create a function from the code string
+        const funcStr = `(async () => {
+          try {
+            ${generatedCode}
+          } catch (error) {
+            return { error: error.toString() };
+          }
+        })()`;
+
         const results = await chrome.scripting.executeScript({
           target: { tabId: tab.id },
-          func: (code) => {
-            return eval(code);
-          },
-          args: [generatedCode]
+          world: 'MAIN',  // Execute in the main world to have access to the page's context
+          func: new Function('return ' + funcStr)
         });
         const result = results[0].result;
         await sendLog(tab.id, '✨ Code execution complete. Result: ' + JSON.stringify(result));
