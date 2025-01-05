@@ -7,14 +7,12 @@
     "activeTab",
     "storage",
     "tabs",
-    "<all_urls>"
+    "<all_urls>",
+    "http://*/*",
+    "https://*/*"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {
     "default_popup": "popup.html"
-  },
-  "content_scripts": [{
-    "matches": ["<all_urls>"],
-    "js": ["content.js"]
-  }]
+  }
 }

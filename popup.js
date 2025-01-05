@@ -15,21 +15,25 @@ function getCurrentTab(callback) {
 
 function executeInTab(code, callback) {
     getCurrentTab(function(tab) {
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            func: (code) => {
+        // First inject a wrapper function
+        const wrapperCode = `
+            (function() {
                 try {
-                    return { success: true, result: eval(code) };
+                    const result = eval(${JSON.stringify(code)});
+                    return { success: true, result: result };
                 } catch (error) {
                     return { success: false, error: error.toString() };
                 }
-            },
-            args: [code]
+            })();
+        `;
+        
+        chrome.tabs.executeScript(tab.id, {
+            code: wrapperCode
         }, function(results) {
             if (chrome.runtime.lastError) {
                 callback({ success: false, error: chrome.runtime.lastError.message });
             } else {
-                callback(results[0].result);
+                callback(results[0]);
             }
         });
     });
