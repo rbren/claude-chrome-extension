@@ -70,21 +70,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 // If we got here, messaging works, proceed with the API call
-                fetch(litellmUrl + '/v1/chat/completions', {
+                const apiUrl = litellmUrl + '/v1/chat/completions';
+                const requestBody = {
+                    model: litellmModel,
+                    messages: [{
+                        role: 'user',
+                        content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
+                    }]
+                };
+                
+                console.log('Making API request to:', apiUrl);
+                console.log('Request body:', requestBody);
+                console.log('Request headers:', {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + litellmKey.substring(0, 4) + '...'
+                });
+
+                fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${litellmKey}`
                     },
-                    body: JSON.stringify({
-                        model: litellmModel,
-                        messages: [{
-                            role: 'user',
-                            content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
-                        }]
-                    })
+                    body: JSON.stringify(requestBody)
                 })
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Got response:', {
+                        status: response.status,
+                        ok: response.ok,
+                        statusText: response.statusText
+                    });
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(`HTTP ${response.status}: ${text}`);
+                        });
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     console.log('API response:', data);
                     const code = data.choices[0].message.content;
