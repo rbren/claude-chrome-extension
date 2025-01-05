@@ -7,15 +7,15 @@ function addMessage(text, type = 'user') {
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
-async function getCurrentTab() {
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    return tab;
+function getCurrentTab(callback) {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        callback(tabs[0]);
+    });
 }
 
-async function executeInTab(code) {
-    const tab = await getCurrentTab();
-    try {
-        const results = await chrome.scripting.executeScript({
+function executeInTab(code, callback) {
+    getCurrentTab(function(tab) {
+        chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: (code) => {
                 try {
@@ -25,11 +25,14 @@ async function executeInTab(code) {
                 }
             },
             args: [code]
+        }, function(results) {
+            if (chrome.runtime.lastError) {
+                callback({ success: false, error: chrome.runtime.lastError.message });
+            } else {
+                callback(results[0].result);
+            }
         });
-        return results[0].result;
-    } catch (error) {
-        return { success: false, error: error.toString() };
-    }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -103,13 +106,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Execute the code
             addMessage('Executing code...', 'system');
-            const result = await executeInTab(code);
-
-            if (result.success) {
-                addMessage('Result: ' + JSON.stringify(result.result, null, 2), 'system');
-            } else {
-                addMessage('Execution error: ' + result.error, 'error');
-            }
+            executeInTab(code, function(result) {
+                if (result.success) {
+                    addMessage('Result: ' + JSON.stringify(result.result, null, 2), 'system');
+                } else {
+                    addMessage('Execution error: ' + result.error, 'error');
+                }
+                sendButton.disabled = false;
+                userInput.focus();
+            });
 
         } catch (error) {
             addMessage('Error: ' + error.toString(), 'error');
