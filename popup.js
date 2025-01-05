@@ -11,7 +11,9 @@ async function sendLog(tabId, message, type = 'info') {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
-  const apiKeyInput = document.getElementById('apiKey');
+  const litellmKeyInput = document.getElementById('litellmKey');
+  const litellmUrlInput = document.getElementById('litellmUrl');
+  const litellmModelInput = document.getElementById('litellmModel');
   const userInput = document.getElementById('userInput');
   const executeButton = document.getElementById('executeButton');
   
@@ -19,37 +21,55 @@ document.addEventListener('DOMContentLoaded', async function() {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   await sendLog(tab.id, '🟢 Popup opened');
   
-  if (apiKeyInput && userInput && executeButton) {
+  if (litellmKeyInput && litellmUrlInput && litellmModelInput && userInput && executeButton) {
     await sendLog(tab.id, '🟢 DOM elements initialized');
   } else {
     await sendLog(tab.id, '🔴 Failed to find DOM elements', 'error');
     return;
   }
 
-  // Load saved API key
-  chrome.storage.local.get(['claudeApiKey'], async function(result) {
-    await sendLog(tab.id, '🔑 API key from storage: ' + (result.claudeApiKey ? '(exists)' : '(none)'));
-    if (result.claudeApiKey) {
-      apiKeyInput.value = result.claudeApiKey;
+  // Load saved values
+  chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel'], async function(result) {
+    await sendLog(tab.id, '🔑 Loading saved settings...');
+    if (result.litellmKey) {
+      litellmKeyInput.value = result.litellmKey;
+    }
+    if (result.litellmUrl) {
+      litellmUrlInput.value = result.litellmUrl;
+    }
+    if (result.litellmModel) {
+      litellmModelInput.value = result.litellmModel;
     }
   });
 
-  // Save API key when changed
-  apiKeyInput.addEventListener('change', async function() {
-    await sendLog(tab.id, '💾 Saving new API key to storage');
-    chrome.storage.local.set({ claudeApiKey: apiKeyInput.value });
+  // Save settings when changed
+  litellmKeyInput.addEventListener('change', async function() {
+    await sendLog(tab.id, '💾 Saving new API key');
+    chrome.storage.local.set({ litellmKey: litellmKeyInput.value });
+  });
+
+  litellmUrlInput.addEventListener('change', async function() {
+    await sendLog(tab.id, '💾 Saving new URL');
+    chrome.storage.local.set({ litellmUrl: litellmUrlInput.value });
+  });
+
+  litellmModelInput.addEventListener('change', async function() {
+    await sendLog(tab.id, '💾 Saving new model');
+    chrome.storage.local.set({ litellmModel: litellmModelInput.value });
   });
 
   executeButton.addEventListener('click', async function() {
     await sendLog(tab.id, '🔵 Execute button clicked');
     
-    const apiKey = apiKeyInput.value;
+    const litellmKey = litellmKeyInput.value;
+    const litellmUrl = litellmUrlInput.value;
+    const litellmModel = litellmModelInput.value;
     const prompt = userInput.value;
     await sendLog(tab.id, `📝 Prompt length: ${prompt?.length || 0} characters`);
 
-    if (!apiKey || !prompt) {
-      await sendLog(tab.id, '🔴 Missing API key or prompt', 'error');
-      alert('Please provide both API key and instructions');
+    if (!litellmKey || !litellmUrl || !litellmModel || !prompt) {
+      await sendLog(tab.id, '🔴 Missing required fields', 'error');
+      alert('Please provide all required fields');
       return;
     }
 
@@ -58,26 +78,24 @@ document.addEventListener('DOMContentLoaded', async function() {
     await sendLog(tab.id, '⏳ Processing request...');
 
     try {
-      await sendLog(tab.id, '🎯 Preparing Claude API request');
+      await sendLog(tab.id, '🎯 Preparing LiteLLM request');
       const requestBody = {
-        model: 'claude-3-opus-20240229',
-        max_tokens: 4096,
+        model: litellmModel,
         messages: [{
           role: 'user',
           content: `Generate JavaScript code for the following task. Only provide the code, no explanations: ${prompt}`
         }]
       };
 
-      await sendLog(tab.id, '🌐 Sending request to Claude API...');
+      await sendLog(tab.id, '🌐 Sending request to LiteLLM...');
 
       let response;
       try {
-        response = await fetch('https://api.anthropic.com/v1/messages', {
+        response = await fetch(litellmUrl + '/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'x-api-key': `Bearer ${apiKey}`,
-            'anthropic-version': '2023-06-01'
+            'Authorization': `Bearer ${litellmKey}`
           },
           body: JSON.stringify(requestBody)
         });
@@ -108,7 +126,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         throw jsonError;
       }
 
-      const generatedCode = data.content[0].text;
+      const generatedCode = data.choices[0].message.content;
       await sendLog(tab.id, '📝 Generated code from Claude response');
       await sendLog(tab.id, '⚡ Sending code to content script for execution');
 

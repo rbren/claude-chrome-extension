@@ -24,16 +24,19 @@
     button:hover {
       background-color: #45a049;
     }
-    #apiKey {
+    input[type="text"] {
       width: 100%;
       margin-bottom: 10px;
       padding: 5px;
+      font-family: monospace;
     }
   </style>
 </head>
 <body>
-  <input type="text" id="apiKey" placeholder="Enter your Claude API key">
-  <textarea id="userInput" placeholder="Enter your instructions for Claude..."></textarea>
+  <input type="text" id="litellmKey" placeholder="Enter your LiteLLM API key (sk-...)">
+  <input type="text" id="litellmUrl" placeholder="Enter LiteLLM URL" value="https://llm-proxy.app.all-hands.dev">
+  <input type="text" id="litellmModel" placeholder="Enter LiteLLM model" value="litellm_proxy/claude-3-5-sonnet-20241022">
+  <textarea id="userInput" placeholder="Enter your instructions..."></textarea>
   <button id="executeButton">Generate and Execute JavaScript</button>
   <script src="popup.js"></script>
 </body>
