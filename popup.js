@@ -1,6 +1,43 @@
+function truncateSection(obj) {
+    const serialized = JSON.stringify(obj);
+    if (serialized.length > 25000) {
+        if (Array.isArray(obj)) {
+            // For arrays, keep first few items that fit within limit
+            let truncated = [];
+            let currentSize = 2; // Account for [] in JSON
+            for (let item of obj) {
+                const itemStr = JSON.stringify(item);
+                if (currentSize + itemStr.length + 1 > 25000) {
+                    break;
+                }
+                truncated.push(item);
+                currentSize += itemStr.length + 1; // +1 for comma
+            }
+            return {
+                _truncated: `Array truncated from ${obj.length} to ${truncated.length} items`,
+                _items: truncated
+            };
+        } else {
+            // For objects, keep a summary
+            return {
+                _truncated: `Object truncated, original size: ${serialized.length} chars`,
+                _summary: {
+                    type: obj.type,
+                    tagName: obj.tagName,
+                    childCount: obj.children ? obj.children.length : 0
+                }
+            };
+        }
+    }
+    return obj;
+}
+
 function toYAML(obj, indent = 0) {
     if (obj === null || obj === undefined) return '';
     const spaces = ' '.repeat(indent);
+    
+    // Check size and potentially truncate before processing
+    obj = truncateSection(obj);
     
     if (Array.isArray(obj)) {
         if (obj.length === 0) return '[]';
@@ -372,7 +409,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let a11yTree = toYAML(accessibilityTree);
             if (a11yTree.length > 100000) {
-                a11yTree = a11yTree.slice(0, 100000) + '\n...';
+                console.log(`Tree size (${a11yTree.length} chars) exceeds 100K limit, truncating...`);
+                // Keep the first part and add a summary of what was truncated
+                const truncatedPart = a11yTree.slice(100000);
+                const truncatedLines = truncatedPart.split('\n').length;
+                a11yTree = a11yTree.slice(0, 100000) + `\n\n_truncated: ${truncatedLines} more lines (${truncatedPart.length} chars) were truncated...`;
             }
 
             // Make API request with accessibility context
