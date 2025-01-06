@@ -1,0 +1,17 @@
+{
+  "name": "claude-chrome-extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for Claude with accessibility tree support",
+  "main": "popup.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFiles": ["./tests/setup.js"]
+  }
+}
