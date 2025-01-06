@@ -39,8 +39,8 @@ function getAccessibilityTree(element = document.body) {
     function getAccessibleProperties(node) {
         const properties = {};
 
-        // Get role
-        const role = node.getAttribute('role') || computedRole(node);
+        // Get explicit role only
+        const role = node.getAttribute('role');
         if (role) properties.role = role;
 
         // Get name from explicit attributes first
@@ -92,33 +92,6 @@ function getAccessibilityTree(element = document.body) {
         return properties;
     }
 
-    // Function to compute implicit role if none is explicitly set
-    function computedRole(node) {
-        const tagRoleMap = {
-            'button': 'button',
-            'a': 'link',
-            'input': node.type === 'text' ? 'textbox' : 
-                     node.type === 'checkbox' ? 'checkbox' : 
-                     node.type === 'radio' ? 'radio' : '',
-            'select': 'combobox',
-            'textarea': 'textbox',
-            'img': 'img',
-            'table': 'table',
-            'ul': 'list',
-            'ol': 'list',
-            'li': 'listitem',
-            'nav': 'navigation',
-            'main': 'main',
-            'header': 'banner',
-            'footer': 'contentinfo',
-            'aside': 'complementary',
-            'article': 'article',
-            'form': 'form',
-            'search': 'search'
-        };
-        
-        return tagRoleMap[node.tagName.toLowerCase()] || '';
-    }
 
     // Function to check if node should be included in the tree
     function shouldIncludeNode(node) {
@@ -149,6 +122,15 @@ function getAccessibilityTree(element = document.body) {
     // Function to check if a node is a container that just wraps other elements
     function isSimpleContainer(node) {
         if (node.nodeType !== Node.ELEMENT_NODE) return false;
+        
+        // Never treat semantic elements as simple containers
+        const semanticElements = [
+            'main', 'nav', 'article', 'section', 'aside', 'header', 'footer',
+            'button', 'a', 'select', 'input', 'textarea', 'form',
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'ul', 'ol', 'li', 'table', 'tr', 'td', 'th'
+        ];
+        if (semanticElements.includes(node.tagName.toLowerCase())) return false;
         
         // Skip if node has meaningful properties
         const props = getAccessibleProperties(node);
