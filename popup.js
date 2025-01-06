@@ -92,52 +92,32 @@ function getAccessibilityTree(element = document.body) {
         return properties;
     }
 
-    // Function to compute implicit role if none is explicitly set but semantically needed
+    // Function to compute implicit role if none is explicitly set
     function computedRole(node) {
-        const tagName = node.tagName.toLowerCase();
+        const tagRoleMap = {
+            'button': 'button',
+            'a': 'link',
+            'input': node.type === 'text' ? 'textbox' : 
+                     node.type === 'checkbox' ? 'checkbox' : 
+                     node.type === 'radio' ? 'radio' : '',
+            'select': 'combobox',
+            'textarea': 'textbox',
+            'img': 'img',
+            'table': 'table',
+            'ul': 'list',
+            'ol': 'list',
+            'li': 'listitem',
+            'nav': 'navigation',
+            'main': 'main',
+            'header': 'banner',
+            'footer': 'contentinfo',
+            'aside': 'complementary',
+            'article': 'article',
+            'form': 'form',
+            'search': 'search'
+        };
         
-        // Only return roles for interactive elements or elements with specific semantic meaning
-        switch (tagName) {
-            case 'a':
-                // Only has link role if it has href
-                return node.hasAttribute('href') ? 'link' : '';
-            case 'button':
-                return 'button';
-            case 'input':
-                // Different roles based on input type
-                switch (node.type) {
-                    case 'button':
-                    case 'submit':
-                    case 'reset':
-                        return 'button';
-                    case 'checkbox':
-                        return 'checkbox';
-                    case 'radio':
-                        return 'radio';
-                    case 'range':
-                        return 'slider';
-                    case 'number':
-                        return 'spinbutton';
-                    case 'text':
-                    case 'email':
-                    case 'tel':
-                    case 'url':
-                    case 'search':
-                    case 'password':
-                        return node.hasAttribute('list') ? 'combobox' : 'textbox';
-                    default:
-                        return '';
-                }
-            case 'select':
-                return node.multiple ? 'listbox' : 'combobox';
-            case 'textarea':
-                return 'textbox';
-            case 'img':
-                // Only has img role if it's not presentational
-                return node.alt === '' ? '' : 'img';
-            default:
-                return '';
-        }
+        return tagRoleMap[node.tagName.toLowerCase()] || '';
     }
 
     // Function to check if node should be included in the tree
