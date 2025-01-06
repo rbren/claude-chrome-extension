@@ -409,21 +409,21 @@ document.addEventListener('DOMContentLoaded', function() {
             // First get the accessibility tree
             const accessibilityTree = await new Promise((resolve) => {
                 const debugCode = `
+                    let tree = null;
                     try {
                         console.log("Starting to build accessibility tree...");
                         const treeFunc = ${getAccessibilityTree.toString()};
                         console.log("Tree function defined");
-                        const tree = treeFunc();
+                        tree = treeFunc();
                         console.log("Tree built:", tree ? "success" : "null");
                         if (!tree) {
                             console.log("Document body:", document.body ? "exists" : "null");
                             console.log("First level children:", document.body ? Array.from(document.body.children).map(c => c.tagName).join(", ") : "N/A");
                         }
-                        return tree;
                     } catch (error) {
                         console.error("Error building accessibility tree:", error);
-                        return null;
-                    }`;
+                    }
+                    tree;`;
 
                 getCurrentTab(function(tab) {
                     chrome.tabs.executeScript(tab.id, {
