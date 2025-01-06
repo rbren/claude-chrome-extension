@@ -55,21 +55,22 @@ function addLoadingMessage() {
 }
 
 function getCurrentTab(callback) {
-    // Get the current window
-    chrome.windows.getCurrent({ populate: true }, (window) => {
-        // Find the active tab that isn't our popup
-        const activeTab = window.tabs.find(tab => 
-            tab.active && 
-            tab.url && 
-            !tab.url.startsWith('chrome-extension://') &&
-            !tab.url.startsWith('chrome://')
+    chrome.tabs.query({
+        active: true,
+        currentWindow: false  // Look in all windows
+    }, (tabs) => {
+        // Find the first non-extension tab
+        const tab = tabs.find(t => 
+            t.url && 
+            !t.url.startsWith('chrome-extension://') &&
+            !t.url.startsWith('chrome://')
         );
         
-        if (!activeTab) {
+        if (!tab) {
             callback(null);
             return;
         }
-        callback(activeTab);
+        callback(tab);
     });
 }
 
@@ -131,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const accessibilityTree = await new Promise((resolve, reject) => {
                 getCurrentTab((tab) => {
                     if (!tab) {
-                        reject(new Error('Cannot analyze this page. Please switch to a regular webpage (not a Chrome or extension page).'));
+                        reject(new Error('No analyzable webpage found. The extension only works on regular web pages, not Chrome or extension pages.'));
                         return;
                     }
 
