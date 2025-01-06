@@ -441,7 +441,64 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log("Document body:", document.body ? "exists" : "null");
                             console.log("First level children:", document.body ? Array.from(document.body.children).map(c => c.tagName).join(", ") : "N/A");
                         }
-                        tree;  // Return value for executeScript
+
+                        // Function to estimate size of a node
+                        function estimateSize(node) {
+                            if (!node || typeof node !== 'object') return 0;
+                            let size = 0;
+                            
+                            // Add size for node properties
+                            size += JSON.stringify({
+                                type: node.type,
+                                tagName: node.tagName,
+                                ...node
+                            }).length;
+                            
+                            // Add size for children
+                            if (node.children) {
+                                size += node.children.reduce((acc, child) => acc + estimateSize(child), 0);
+                            }
+                            
+                            return size;
+                        }
+
+                        // Function to truncate large sections while preserving structure
+                        function truncateLargeSections(node, maxSectionSize = 25000) {
+                            if (!node || typeof node !== 'object') return node;
+                            
+                            // Process children first if they exist
+                            if (node.children && node.children.length > 0) {
+                                // First pass: truncate any oversized children
+                                node.children = node.children.map(child => {
+                                    const childSize = estimateSize(child);
+                                    if (childSize > maxSectionSize) {
+                                        console.log(\`Truncating large section: \${child.tagName || 'text'} (\${childSize} chars)\`);
+                                        return truncateLargeSections(child, maxSectionSize);
+                                    }
+                                    return child;
+                                });
+                                
+                                // Second pass: look for repetitive sections
+                                const pattern = findRepetitiveStructure(node.children);
+                                if (pattern && pattern.repetitions > 3) {
+                                    const patternLength = pattern.length;
+                                    node.children = [
+                                        ...node.children.slice(0, patternLength * 2),
+                                        {
+                                            type: 'text',
+                                            content: \`[... \${pattern.repetitions - 3} more similar \${patternLength === 1 ? 'items' : 'groups'} omitted ...]\`
+                                        },
+                                        ...node.children.slice(patternLength * (pattern.repetitions - 1))
+                                    ];
+                                }
+                            }
+                            
+                            return node;
+                        }
+
+                        // Truncate large sections before returning
+                        const processedTree = truncateLargeSections(tree);
+                        processedTree;  // Return value for executeScript
                     } catch (e) {
                         console.error("Error building tree:", e);
                         throw e;
@@ -465,13 +522,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             let a11yTree = toYAML(accessibilityTree);
-            if (a11yTree.length > 100000) {
-                console.log(`Tree size (${a11yTree.length} chars) exceeds 100K limit, truncating...`);
-                // Keep the first part and add a summary of what was truncated
-                const truncatedPart = a11yTree.slice(100000);
-                const truncatedLines = truncatedPart.split('\n').length;
-                a11yTree = a11yTree.slice(0, 100000) + `\n\n_truncated: ${truncatedLines} more lines (${truncatedPart.length} chars) were truncated...`;
-            }
 
             // Make API request with accessibility context
             const response = await fetch(litellmUrlInput.value + '/v1/chat/completions', {
