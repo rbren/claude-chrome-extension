@@ -35,58 +35,34 @@ function getAccessibilityTree(element = document.body) {
             .join(' ');
     }
 
-    // Function to extract key accessibility properties
+    // Function to extract element attributes and properties
     function getAccessibleProperties(node) {
+        if (node.nodeType !== Node.ELEMENT_NODE) {
+            return {};
+        }
+
         const properties = {};
 
-        // Get explicit role only
-        const role = node.getAttribute('role');
-        if (role) properties.role = role;
-
-        // Get name from explicit attributes first
-        let name = node.getAttribute('aria-label') || node.getAttribute('alt');
-        
-        // Only use text content if:
-        // 1. No explicit name was found
-        // 2. The node has direct text (not just from children)
-        // 3. The node is a leaf element or is meant to aggregate text (like buttons, links)
-        if (!name) {
-            const directText = getDirectTextContent(node);
-            const isLeafOrTextAggregator = 
-                node.children.length === 0 || 
-                ['button', 'a', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(node.tagName.toLowerCase());
-            
-            if (directText && isLeafOrTextAggregator) {
-                name = directText;
-            }
-        }
-        
-        if (name) properties.name = name;
-
-        // Get class names if present
-        if (node.className && typeof node.className === 'string' && node.className.trim()) {
-            properties.class = node.className.trim();
+        // Get all attributes
+        for (const attr of node.attributes) {
+            properties[attr.name] = attr.value;
         }
 
-        // Get ID if present
-        if (node.id && node.id.trim()) {
-            properties.id = node.id.trim();
+        // Get direct text content if any
+        const directText = getDirectTextContent(node);
+        if (directText) {
+            properties.textContent = directText;
         }
 
-        // Get states (only include true values)
-        const states = {};
-        if (node.hasAttribute('disabled') || node.getAttribute('aria-disabled') === 'true') {
-            states.disabled = true;
-        }
-        if (node.getAttribute('aria-expanded') === 'true') {
-            states.expanded = true;
-        }
-        if (node.getAttribute('aria-checked') === 'true' || 
-            (node.tagName === 'INPUT' && node.type === 'checkbox' && node.checked)) {
-            states.checked = true;
-        }
-        if (Object.keys(states).length > 0) {
-            properties.state = states;
+        // Add element type
+        properties.tagName = node.tagName.toLowerCase();
+
+        // Add input-specific properties
+        if (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA' || node.tagName === 'SELECT') {
+            if (node.value) properties.value = node.value;
+            if (node.checked !== undefined) properties.checked = node.checked;
+            if (node.disabled !== undefined) properties.disabled = node.disabled;
+            if (node.readOnly !== undefined) properties.readOnly = node.readOnly;
         }
 
         return properties;
