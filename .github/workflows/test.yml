@@ -28,6 +28,14 @@ jobs:
       
     - name: Run tests
       run: npm test
+      
+    - name: Check for snapshot differences
+      run: |
+        if [[ -n $(git status --porcelain tests/fixtures/snapshots) ]]; then
+          echo "Error: Snapshot tests generated differences"
+          git diff tests/fixtures/snapshots
+          exit 1
+        fi
 
     - name: Upload test coverage
       uses: actions/upload-artifact@v4

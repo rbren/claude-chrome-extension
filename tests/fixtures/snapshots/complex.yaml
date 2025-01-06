@@ -1,0 +1,152 @@
+- children:
+    - aria-label: Main navigation
+      children:
+        - children:
+            - children:
+                - children:
+                    - content: Home
+                      type: text
+                  href: '#home'
+                  tagName: a
+                  textContent: Home
+                  type: element
+              tagName: li
+              type: element
+            - children:
+                - children:
+                    - content: About
+                      type: text
+                  href: '#about'
+                  tagName: a
+                  textContent: About
+                  type: element
+              tagName: li
+              type: element
+            - children:
+                - children:
+                    - content: Contact
+                      type: text
+                  href: '#contact'
+                  tagName: a
+                  textContent: Contact
+                  type: element
+              tagName: li
+              type: element
+          tagName: ul
+          type: element
+      tagName: nav
+      type: element
+  role: banner
+  tagName: header
+  type: element
+- children:
+    - children:
+        - children:
+            - content: Complex Layout Test
+              type: text
+          tagName: h1
+          textContent: Complex Layout Test
+          type: element
+        - aria-labelledby: section1-heading
+          children:
+            - children:
+                - content: Section 1
+                  type: text
+              id: section1-heading
+              tagName: h2
+              textContent: Section 1
+              type: element
+            - children:
+                - content: This is a test of complex nested structures.
+                  type: text
+              tagName: p
+              textContent: This is a test of complex nested structures.
+              type: element
+            - children:
+                - children:
+                    - content: 'Name:'
+                      type: text
+                  for: name
+                  tagName: label
+                  textContent: 'Name:'
+                  type: element
+                - aria-required: 'true'
+                  checked: false
+                  disabled: false
+                  id: name
+                  name: name
+                  readOnly: false
+                  tagName: input
+                  type: text
+                - aria-label: Submit form
+                  children:
+                    - content: Send
+                      type: text
+                  tagName: button
+                  textContent: Send
+                  type: submit
+              tagName: form
+              type: element
+          tagName: section
+          type: element
+      tagName: article
+      type: element
+    - children:
+        - children:
+            - children:
+                - content: Related Links
+                  type: text
+              tagName: h3
+              textContent: Related Links
+              type: element
+            - children:
+                - children:
+                    - children:
+                        - content: Link 1
+                          type: text
+                      href: '#link1'
+                      tagName: a
+                      textContent: Link 1
+                      type: element
+                  tagName: li
+                  type: element
+                - children:
+                    - children:
+                        - content: Link 2
+                          type: text
+                      href: '#link2'
+                      tagName: a
+                      textContent: Link 2
+                      type: element
+                  tagName: li
+                  type: element
+                - children:
+                    - children:
+                        - content: Link 3
+                          type: text
+                      href: '#link3'
+                      tagName: a
+                      textContent: Link 3
+                      type: element
+                  tagName: li
+                  type: element
+              tagName: ul
+              type: element
+          class: widget
+          role: complementary
+          tagName: div
+          type: element
+      tagName: aside
+      type: element
+  tagName: main
+  type: element
+- children:
+    - children:
+        - content: © 2024 Test Site
+          type: text
+      tagName: p
+      textContent: © 2024 Test Site
+      type: element
+  role: contentinfo
+  tagName: footer
+  type: element

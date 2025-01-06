@@ -1,0 +1,56 @@
+children:
+  - aria-hidden: 'false'
+    children:
+      - children:
+          - content: Important Hidden Content
+            type: text
+        tagName: h2
+        textContent: Important Hidden Content
+        type: element
+      - children:
+          - content: This content is visually hidden but should be in the tree.
+            type: text
+        tagName: p
+        textContent: This content is visually hidden but should be in the tree.
+        type: element
+    class: hidden
+    tagName: div
+    type: element
+  - children:
+      - content: Result 1
+        type: text
+    class: result-item
+    tagName: div
+    textContent: Result 1
+    type: element
+  - children:
+      - content: Result 2
+        type: text
+    class: result-item
+    tagName: div
+    textContent: Result 2
+    type: element
+  - children:
+      - content: Result 3
+        type: text
+    class: result-item
+    tagName: div
+    textContent: Result 3
+    type: element
+  - children:
+      - content: Result 4
+        type: text
+    class: result-item
+    tagName: div
+    textContent: Result 4
+    type: element
+  - children:
+      - content: Result 5
+        type: text
+    class: result-item
+    tagName: div
+    textContent: Result 5
+    type: element
+role: main
+tagName: div
+type: element

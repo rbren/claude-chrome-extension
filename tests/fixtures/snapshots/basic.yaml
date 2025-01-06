@@ -1,0 +1,22 @@
+children:
+  - children:
+      - content: Welcome
+        type: text
+    tagName: h1
+    textContent: Welcome
+    type: element
+  - children:
+      - content: This is a basic test page.
+        type: text
+    tagName: p
+    textContent: This is a basic test page.
+    type: element
+  - aria-label: Close
+    children:
+      - content: ×
+        type: text
+    tagName: button
+    textContent: ×
+    type: element
+tagName: main
+type: element
