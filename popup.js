@@ -55,14 +55,17 @@ function addLoadingMessage() {
 }
 
 function getCurrentTab(callback) {
-    // Get the currently focused window
-    chrome.windows.getLastFocused((focusedWindow) => {
-        // Get the active tab in that window
-        chrome.tabs.query({ active: true, windowId: focusedWindow.id }, (tabs) => {
-            if (tabs.length > 0 && tabs[0].url && !tabs[0].url.startsWith('chrome://')) {
-                callback(tabs[0]);
-            }
-        });
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (tabs.length === 0) {
+            console.error('No active tab found');
+            return;
+        }
+        const tab = tabs[0];
+        if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://')) {
+            console.error('Cannot access tab:', tab.url);
+            return;
+        }
+        callback(tab);
     });
 }
 
@@ -122,22 +125,34 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // Get the accessibility tree
             const accessibilityTree = await new Promise((resolve) => {
-                // First inject accessibility.js
-                chrome.tabs.executeScript({
-                    file: 'accessibility.js'
-                }, () => {
-                    // Then execute the tree building
-                    executeInTab(`AccessibilityTree.buildAccessibilityTree()`, (result) => {
-                        if (result.success) {
-                            resolve(result.result);
-                        } else {
-                            console.error('Error getting accessibility tree:', result.error);
+                getCurrentTab((tab) => {
+                    // First inject accessibility.js
+                    chrome.tabs.executeScript(tab.id, {
+                        file: 'accessibility.js'
+                    }, () => {
+                        if (chrome.runtime.lastError) {
+                            console.error('Error injecting script:', chrome.runtime.lastError);
                             resolve(null);
+                            return;
                         }
+                        // Then execute the tree building
+                        chrome.tabs.executeScript(tab.id, {
+                            code: 'AccessibilityTree.buildAccessibilityTree(document.body)'
+                        }, (results) => {
+                            if (chrome.runtime.lastError) {
+                                console.error('Error executing script:', chrome.runtime.lastError);
+                                resolve(null);
+                                return;
+                            }
+                            resolve(results[0]);
+                        });
                     });
                 });
             });
 
+            if (!accessibilityTree) {
+                throw new Error('Failed to get accessibility tree from the active tab');
+            }
             // Convert to YAML
             const yamlOutput = toYAML(accessibilityTree);
             addMessage(yamlOutput, 'system');
