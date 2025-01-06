@@ -168,8 +168,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Convert to YAML
             const yamlOutput = toYAML(accessibilityTree);
 
-            // Send to LLM
-            const response = await fetch(litellmUrlInput.value, {
+            // Make API request with accessibility context
+            const response = await fetch(litellmUrlInput.value + '/v1/chat/completions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -177,26 +177,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify({
                     model: litellmModelInput.value,
-                    messages: [
-                        {
-                            role: "system",
-                            content: "You are an accessibility expert. Analyze the accessibility tree provided and give specific, actionable feedback about accessibility issues and how to fix them."
-                        },
-                        ...(additionalPromptInput.value.trim() ? [{
-                            role: "system",
-                            content: additionalPromptInput.value.trim()
-                        }] : []),
-                        {
-                            role: "user",
-                            content: userInput.value.trim()
-                        },
-                        {
-                            role: "system",
-                            content: "Here is the accessibility tree in YAML format:\n\n" + yamlOutput
-                        }
-                    ],
-                    temperature: 0.7,
-                    stream: false
+                    messages: [{
+                        role: 'user',
+                        content: `
+<ACCESSIBILITY_TREE>
+${yamlOutput}
+</ACCESSIBILITY_TREE>
+
+<TASK>
+Generate JavaScript code for this task: ${prompt}
+Only provide the code, no explanations.
+
+Your code will be passed to "eval". It is NOT the body of a function, and should not end with a return statement.
+The last value in the code will be shown to the user. This is a good place to
+put a message describing what happened with the execution.
+
+Make your JavaScript as general as possible. It should be able to handle ambiguity
+like escaped characters, missing elements, etc.
+
+DO NOT assume anything about the page other than what you see in the accessibility tree.
+Other tags, data attributes, etc should not be assumed to exist.
+
+When possible, use controls present on the page to search, filter, etc. If you need to,
+use string matching to process text content.
+
+When asked to perform an action that will likely have side effects (e.g.
+submitting a form), be sure that you've been explicitly instructed to do so.
+E.g. if a user just says "fill out a form" don't submit the form unless they explicitly
+ask you to.
+
+${additionalPromptInput.value ? `<ADDITIONAL_INSTRUCTIONS>\n${additionalPromptInput.value}\n</ADDITIONAL_INSTRUCTIONS>` : ''}
+</TASK>
+`
+                    }]
                 })
             });
 
@@ -205,11 +218,37 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const data = await response.json();
-            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-                throw new Error('Invalid response from API');
+            let code = data.choices[0].message.content;
+            
+            // Parse code blocks if present
+            if (code.includes('```javascript')) {
+                const match = code.match(/```javascript\n([\s\S]*?)```/);
+                if (match) {
+                    code = match[1].trim();
+                }
+            } else if (code.includes('```')) {
+                const match = code.match(/```\n?([\s\S]*?)```/);
+                if (match) {
+                    code = match[1].trim();
+                }
             }
 
-            addMessage(data.choices[0].message.content, 'system');
+            // Execute the code
+            executeInTab(code, function(result) {
+                // Remove loading message
+                loadingMessage.remove();
+
+                const response = [
+                    'Generated code:\n' + code + '\n',
+                    result.success ? 
+                        'Result: ' + JSON.stringify(result.result, null, 2) :
+                        'Error: ' + result.error
+                ].join('\n');
+                
+                addMessage(response, result.success ? 'system' : 'error');
+                sendButton.disabled = false;
+                userInput.focus();
+            });
         } catch (error) {
             addMessage('Error: ' + error.message, 'error');
         } finally {
