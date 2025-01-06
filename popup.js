@@ -513,6 +513,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             let a11yTree = toYAML(accessibilityTree);
+            if (a11yTree.length > 100000) {
+                a11yTree = a11yTree.slice(0, 100000) + '...';
+            }
 
             // Make API request with accessibility context
             const response = await fetch(litellmUrlInput.value + '/v1/chat/completions', {
