@@ -1,43 +1,6 @@
-function truncateSection(obj) {
-    const serialized = JSON.stringify(obj);
-    if (serialized.length > 25000) {
-        if (Array.isArray(obj)) {
-            // For arrays, keep first few items that fit within limit
-            let truncated = [];
-            let currentSize = 2; // Account for [] in JSON
-            for (let item of obj) {
-                const itemStr = JSON.stringify(item);
-                if (currentSize + itemStr.length + 1 > 25000) {
-                    break;
-                }
-                truncated.push(item);
-                currentSize += itemStr.length + 1; // +1 for comma
-            }
-            return {
-                _truncated: `Array truncated from ${obj.length} to ${truncated.length} items`,
-                _items: truncated
-            };
-        } else {
-            // For objects, keep a summary
-            return {
-                _truncated: `Object truncated, original size: ${serialized.length} chars`,
-                _summary: {
-                    type: obj.type,
-                    tagName: obj.tagName,
-                    childCount: obj.children ? obj.children.length : 0
-                }
-            };
-        }
-    }
-    return obj;
-}
-
 function toYAML(obj, indent = 0) {
     if (obj === null || obj === undefined) return '';
     const spaces = ' '.repeat(indent);
-    
-    // Check size and potentially truncate before processing
-    obj = truncateSection(obj);
     
     if (Array.isArray(obj)) {
         if (obj.length === 0) return '[]';
@@ -442,62 +405,46 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log("First level children:", document.body ? Array.from(document.body.children).map(c => c.tagName).join(", ") : "N/A");
                         }
 
-                        // Function to estimate size of a node
-                        function estimateSize(node) {
-                            if (!node || typeof node !== 'object') return 0;
-                            let size = 0;
-                            
-                            // Add size for node properties
-                            size += JSON.stringify({
-                                type: node.type,
-                                tagName: node.tagName,
-                                ...node
-                            }).length;
-                            
-                            // Add size for children
-                            if (node.children) {
-                                size += node.children.reduce((acc, child) => acc + estimateSize(child), 0);
-                            }
-                            
-                            return size;
-                        }
-
-                        // Function to truncate large sections while preserving structure
-                        function truncateLargeSections(node, maxSectionSize = 25000) {
+                        // Function to detect and truncate repetitive sections
+                        function truncateRepetitiveContent(node) {
                             if (!node || typeof node !== 'object') return node;
                             
                             // Process children first if they exist
                             if (node.children && node.children.length > 0) {
-                                // First pass: truncate any oversized children
-                                node.children = node.children.map(child => {
-                                    const childSize = estimateSize(child);
-                                    if (childSize > maxSectionSize) {
-                                        console.log(\`Truncating large section: \${child.tagName || 'text'} (\${childSize} chars)\`);
-                                        return truncateLargeSections(child, maxSectionSize);
-                                    }
-                                    return child;
-                                });
+                                // First recursively process all children
+                                node.children = node.children.map(truncateRepetitiveContent);
                                 
-                                // Second pass: look for repetitive sections
+                                // Then look for repetitive patterns in the children
                                 const pattern = findRepetitiveStructure(node.children);
                                 if (pattern && pattern.repetitions > 3) {
                                     const patternLength = pattern.length;
+                                    const originalLength = node.children.length;
+                                    
+                                    // Keep more examples for smaller patterns
+                                    const numExamples = Math.min(5, Math.max(2, Math.floor(10 / patternLength)));
+                                    
                                     node.children = [
-                                        ...node.children.slice(0, patternLength * 2),
+                                        ...node.children.slice(0, patternLength * numExamples),
                                         {
                                             type: 'text',
-                                            content: \`[... \${pattern.repetitions - 3} more similar \${patternLength === 1 ? 'items' : 'groups'} omitted ...]\`
+                                            content: \`[... \${pattern.repetitions - (numExamples + 1)} more similar \${patternLength === 1 ? 'items' : 'groups'} omitted ...]\`
                                         },
                                         ...node.children.slice(patternLength * (pattern.repetitions - 1))
                                     ];
+                                    
+                                    console.log(
+                                        \`Truncated repetitive section in \${node.tagName}: \` +
+                                        \`pattern length \${patternLength}, reduced from \${originalLength} to \${node.children.length} items\`
+                                    );
                                 }
                             }
                             
                             return node;
                         }
 
-                        // Truncate large sections before returning
-                        const processedTree = truncateLargeSections(tree);
+                        // Only truncate repetitive content, keeping the full structure
+                        const processedTree = truncateRepetitiveContent(tree);
+                        console.log('Tree processing complete');
                         processedTree;  // Return value for executeScript
                     } catch (e) {
                         console.error("Error building tree:", e);
