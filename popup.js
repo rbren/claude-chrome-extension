@@ -168,6 +168,45 @@ function getAccessibilityTree(element = document.body) {
     }
 
     // Main recursive function to build the tree
+    function findRepetitiveStructure(children) {
+        if (children.length < 4) return null; // Need at least 4 items to detect pattern
+        
+        // Function to get a simple structural hash of a node
+        function getStructuralHash(node) {
+            if (!node || typeof node !== 'object') return '';
+            if (node.type === 'text') return 'text';
+            return `${node.type}:${node.tagName}:${node.children ? node.children.length : 0}`;
+        }
+
+        // Get structural hashes for all children
+        const hashes = children.map(getStructuralHash);
+        
+        // Look for repeating patterns
+        let maxPatternLength = Math.floor(children.length / 2); // Pattern must repeat at least twice
+        for (let len = 1; len <= maxPatternLength; len++) {
+            let isPattern = true;
+            const pattern = hashes.slice(0, len).join('|');
+            
+            // Check if this pattern repeats
+            for (let i = len; i < hashes.length; i += len) {
+                const nextSection = hashes.slice(i, i + len).join('|');
+                if (nextSection && nextSection !== pattern) {
+                    isPattern = false;
+                    break;
+                }
+            }
+            
+            if (isPattern && pattern) {
+                return {
+                    length: len,
+                    repetitions: Math.floor(children.length / len)
+                };
+            }
+        }
+        
+        return null;
+    }
+
     function buildTree(node) {
         console.log('Building tree for:', node.nodeType === Node.ELEMENT_NODE ? node.tagName : 'text/comment');
         
@@ -217,7 +256,25 @@ function getAccessibilityTree(element = document.body) {
                 }
                 return true;
             });
-            accessibleNode.children = children;
+
+            // Check for repetitive structures in children
+            const pattern = findRepetitiveStructure(children);
+            if (pattern && pattern.repetitions > 3) { // If pattern repeats more than 3 times
+                // Keep first two repetitions and last repetition
+                const patternLength = pattern.length;
+                const truncatedChildren = [
+                    ...children.slice(0, patternLength * 2), // First two repetitions
+                    {
+                        type: 'text',
+                        content: `[... ${pattern.repetitions - 3} more similar ${patternLength === 1 ? 'items' : 'groups'} omitted ...]`
+                    },
+                    ...children.slice(patternLength * (pattern.repetitions - 1)) // Last repetition
+                ];
+                accessibleNode.children = truncatedChildren;
+                console.log(`Truncated repetitive section: pattern length ${patternLength}, ${pattern.repetitions} repetitions`);
+            } else {
+                accessibleNode.children = children;
+            }
             console.log('Added children to node:', node.tagName);
         }
 
