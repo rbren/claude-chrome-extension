@@ -378,7 +378,8 @@ ${a11yTree}
 Generate JavaScript code for this task: ${prompt}
 Only provide the code, no explanations.
 
-The last value in the code will be returned to the user. This is a good place to
+Your code will be passed to "eval". It is NOT the body of a function, and should not end with a return statement.
+The last value in the code will be shown to the user. This is a good place to
 put a message describing what happened with the execution.
 
 Make your JavaScript as general as possible. It should be able to handle ambiguity
