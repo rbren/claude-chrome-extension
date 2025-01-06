@@ -356,11 +356,35 @@ document.addEventListener('DOMContentLoaded', function() {
     const userInput = document.getElementById('userInput');
     const sendButton = document.getElementById('sendButton');
 
+    const additionalPromptInput = document.getElementById('additionalPrompt');
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // Tab switching logic
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabId = tab.getAttribute('data-tab');
+            
+            // Update tab buttons
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Update tab contents
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === `${tabId}-tab`) {
+                    content.classList.add('active');
+                }
+            });
+        });
+    });
+
     // Load saved values
-    chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel'], function(result) {
+    chrome.storage.local.get(['litellmKey', 'litellmUrl', 'litellmModel', 'additionalPrompt'], function(result) {
         if (result.litellmKey) litellmKeyInput.value = result.litellmKey;
         if (result.litellmUrl) litellmUrlInput.value = result.litellmUrl;
         if (result.litellmModel) litellmModelInput.value = result.litellmModel;
+        if (result.additionalPrompt) additionalPromptInput.value = result.additionalPrompt;
     });
 
     // Save values when they change
@@ -372,6 +396,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     litellmModelInput.addEventListener('change', () => {
         chrome.storage.local.set({ litellmModel: litellmModelInput.value });
+    });
+    additionalPromptInput.addEventListener('change', () => {
+        chrome.storage.local.set({ additionalPrompt: additionalPromptInput.value });
     });
 
     async function handleSend() {
@@ -542,6 +569,8 @@ Other tags, data attributes, etc should not be assumed to exist.
 
 When possible, use controls present on the page to search, filter, etc. If you need to,
 use string matching to process text content.
+
+${additionalPromptInput.value ? `<ADDITIONAL_INSTRUCTIONS>\n${additionalPromptInput.value}\n</ADDITIONAL_INSTRUCTIONS>` : ''}
 </TASK>
 `
 
