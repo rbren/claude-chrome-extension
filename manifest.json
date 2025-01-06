@@ -7,7 +7,9 @@
     "activeTab",
     "storage",
     "tabs",
-    "<all_urls>"
+    "http://*/*",
+    "https://*/*",
+    "file://*/*"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "browser_action": {

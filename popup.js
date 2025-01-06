@@ -55,17 +55,18 @@ function addLoadingMessage() {
 }
 
 function getCurrentTab(callback) {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    // Query for the active tab in the last focused window
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true,
+        // Exclude the extension popup
+        url: ['http://*/*', 'https://*/*', 'file://*/*']
+    }, (tabs) => {
         if (tabs.length === 0) {
-            console.error('No active tab found');
+            console.error('No accessible tab found');
             return;
         }
-        const tab = tabs[0];
-        if (!tab.url || tab.url.startsWith('chrome://') || tab.url.startsWith('chrome-extension://')) {
-            console.error('Cannot access tab:', tab.url);
-            return;
-        }
-        callback(tab);
+        callback(tabs[0]);
     });
 }
 
@@ -124,15 +125,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Get the accessibility tree
-            const accessibilityTree = await new Promise((resolve) => {
+            const accessibilityTree = await new Promise((resolve, reject) => {
                 getCurrentTab((tab) => {
+                    if (!tab) {
+                        reject(new Error('Please switch to a webpage before using the extension'));
+                        return;
+                    }
+
                     // First inject accessibility.js
                     chrome.tabs.executeScript(tab.id, {
                         file: 'accessibility.js'
                     }, () => {
                         if (chrome.runtime.lastError) {
-                            console.error('Error injecting script:', chrome.runtime.lastError);
-                            resolve(null);
+                            reject(new Error('Cannot access this page. Try a different webpage.'));
                             return;
                         }
                         // Then execute the tree building
@@ -140,8 +145,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             code: 'AccessibilityTree.buildAccessibilityTree(document.body)'
                         }, (results) => {
                             if (chrome.runtime.lastError) {
-                                console.error('Error executing script:', chrome.runtime.lastError);
-                                resolve(null);
+                                reject(new Error('Failed to analyze page accessibility.'));
+                                return;
+                            }
+                            if (!results || !results[0]) {
+                                reject(new Error('No accessibility information found.'));
                                 return;
                             }
                             resolve(results[0]);
