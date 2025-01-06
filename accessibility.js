@@ -253,9 +253,21 @@ function buildAccessibilityTree(element = document.body) {
     return buildTree(element);
 }
 
-// Export functions for testing
+// Export functions for both browser and Node.js environments
 if (typeof module !== 'undefined' && module.exports) {
+    // Node.js
     module.exports = {
+        shouldIncludeNode,
+        isSimpleContainer,
+        getAccessibleProperties,
+        getDirectTextContent,
+        findRepetitiveStructure,
+        truncateRepetitiveStructures,
+        buildAccessibilityTree
+    };
+} else {
+    // Browser
+    window.AccessibilityTree = {
         shouldIncludeNode,
         isSimpleContainer,
         getAccessibleProperties,

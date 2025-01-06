@@ -1,13 +1,4 @@
-// Import accessibility functions
-const {
-  shouldIncludeNode,
-  isSimpleContainer,
-  getAccessibleProperties,
-  getDirectTextContent,
-  findRepetitiveStructure,
-  truncateRepetitiveStructures,
-  buildAccessibilityTree
-} = require('./accessibility.js');
+// Accessibility functions are available via AccessibilityTree global
 
 function toYAML(obj, indent = 0) {
     if (obj === null || obj === undefined) return '';
@@ -155,4 +146,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Alias for backward compatibility
-const getAccessibilityTree = buildAccessibilityTree;
+const getAccessibilityTree = AccessibilityTree.buildAccessibilityTree;
