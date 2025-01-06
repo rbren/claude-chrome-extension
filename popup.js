@@ -167,6 +167,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // Convert to YAML
             const yamlOutput = toYAML(accessibilityTree);
+            if (yamlOutput.length > 100000) {
+                yamlOutput = yamlOutput.slice(0, 100000) + '...';
+            }
 
             // Make API request with accessibility context
             const response = await fetch(litellmUrlInput.value + '/v1/chat/completions', {
