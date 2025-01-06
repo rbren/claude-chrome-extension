@@ -237,10 +237,10 @@ function getAccessibilityTree(element = document.body) {
             const pattern = findRepetitiveStructure(children);
             if (pattern && pattern.repetitions > 3) { // If pattern repeats more than 3 times
                 const patternLength = pattern.length;
-                // Calculate how many repetitions to show (25% with max of 20)
-                const repsToShow = Math.min(20, Math.ceil(pattern.repetitions * 0.25));
+                // Show first 20 repetitions
+                const repsToShow = Math.min(20, pattern.repetitions - 1); // -1 because we'll show the last one separately
                 const truncatedChildren = [
-                    ...children.slice(0, patternLength * repsToShow), // First 25% of repetitions (max 20)
+                    ...children.slice(0, patternLength * repsToShow), // First 20 repetitions
                     {
                         type: 'text',
                         content: `[... ${pattern.repetitions - (repsToShow + 1)} more similar ${patternLength === 1 ? 'items' : 'groups'} omitted ...]`
