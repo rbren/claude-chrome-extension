@@ -143,30 +143,37 @@ function getAccessibilityTree(element = document.body) {
         // Skip comment nodes and empty text nodes
         if (node.nodeType === Node.COMMENT_NODE || 
             (node.nodeType === Node.TEXT_NODE && !node.textContent.trim())) {
-            console.log('Skipping node: Comment or empty text');
             return false;
         }
 
         if (node.nodeType === Node.ELEMENT_NODE) {
             const tagName = node.tagName.toLowerCase();
-            console.log('Checking element:', tagName);
             
+            // Skip script, style, meta tags
+            if (['script', 'style', 'meta', 'link', 'noscript'].includes(tagName)) {
+                return false;
+            }
+
             try {
                 const style = getComputedStyle(node);
+                const rect = node.getBoundingClientRect();
 
-                // Skip hidden elements
-                if (style.display === 'none' || style.visibility === 'hidden') {
-                    console.log('Skipping hidden element:', tagName);
+                // Skip truly hidden elements, but be more lenient with dynamic content
+                if ((style.display === 'none' || style.visibility === 'hidden') &&
+                    !node.getAttribute('aria-hidden') && // Keep aria-hidden elements as they may be important for accessibility
+                    !node.getAttribute('role') && // Keep elements with roles
+                    rect.width === 0 && rect.height === 0) { // Only skip if also has no dimensions
                     return false;
                 }
 
-                // Skip script, style, meta tags
-                if (['script', 'style', 'meta', 'link', 'noscript'].includes(tagName)) {
-                    console.log('Skipping excluded tag:', tagName);
-                    return false;
+                // Keep elements that are visually hidden but may be important for accessibility
+                if (node.getAttribute('aria-label') ||
+                    node.getAttribute('aria-description') ||
+                    node.getAttribute('role') ||
+                    node.getAttribute('title')) {
+                    return true;
                 }
             } catch (e) {
-                console.error('Error checking style for', tagName, ':', e);
                 // Don't skip the node if we can't check its style
             }
         }
@@ -179,7 +186,6 @@ function getAccessibilityTree(element = document.body) {
         if (node.nodeType !== Node.ELEMENT_NODE) return false;
         
         const tagName = node.tagName.toLowerCase();
-        console.log('Checking if simple container:', tagName);
         
         // Never treat semantic elements as simple containers
         const semanticElements = [
@@ -189,14 +195,27 @@ function getAccessibilityTree(element = document.body) {
             'ul', 'ol', 'li', 'table', 'tr', 'td', 'th'
         ];
         if (semanticElements.includes(tagName)) {
-            console.log('Not a simple container - semantic element:', tagName);
+            return false;
+        }
+        
+        // Never treat elements with ARIA attributes or roles as simple containers
+        if (node.getAttribute('role') ||
+            node.getAttribute('aria-label') ||
+            node.getAttribute('aria-description') ||
+            node.getAttribute('aria-hidden') ||
+            node.getAttribute('title')) {
             return false;
         }
         
         // Skip if node has meaningful properties
         const props = getAccessibleProperties(node);
-        if (Object.keys(props).length > 0) {
-            console.log('Not a simple container - has properties:', tagName, props);
+        const meaningfulProps = Object.keys(props).filter(key => 
+            key !== 'tagName' && // Ignore basic properties
+            key !== 'class' &&
+            key !== 'id' &&
+            key !== 'style'
+        );
+        if (meaningfulProps.length > 0) {
             return false;
         }
 
@@ -204,11 +223,9 @@ function getAccessibilityTree(element = document.body) {
         const hasDirectText = Array.from(node.childNodes).some(child => 
             child.nodeType === Node.TEXT_NODE && child.textContent.trim());
         if (hasDirectText) {
-            console.log('Not a simple container - has direct text:', tagName);
             return false;
         }
 
-        console.log('Is a simple container:', tagName);
         return true;
     }
 
