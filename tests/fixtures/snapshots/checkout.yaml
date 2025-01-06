@@ -1,0 +1,2549 @@
+children:
+  - children:
+      - content: Skip to Content
+        type: text
+    class: skip-to-content screen-reader-text
+    href: '#payment-details'
+    id: skip-to-content
+    tabindex: '-1'
+    tagName: a
+    textContent: Skip to Content
+    type: element
+  - aria-controls: main-nav
+    aria-expanded: 'false'
+    children:
+      - children:
+          - d: M32 96v64h448V96H32zm0 128v64h448v-64H32zm0 128v64h448v-64H32z
+            tagName: path
+            type: element
+        height: '512'
+        tagName: svg
+        type: element
+        viewBox: 0 0 512 512
+        width: '512'
+        xmlns: http://www.w3.org/2000/svg
+      - children:
+          - d: M371.23 21.213L350.018 0 185.615 164.402 21.213 0 0 21.213 164.402 185.615 0 350.018 21.213 371.23 185.615 206.828 350.018 371.23 371.23 350.018 206.828 185.615z
+            tagName: path
+            type: element
+        height: '512'
+        tagName: svg
+        type: element
+        viewBox: 0 0 512 512
+        width: '512'
+        xmlns: http://www.w3.org/2000/svg
+    id: main-nav-toggle
+    role: button
+    tabindex: '-1'
+    tagName: div
+    type: element
+  - aria-label: Main
+    children:
+      - children:
+          - children:
+              - children:
+                  - alt: The Brattle
+                    src: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2023/11/03001806/Brattle-logo.png
+                    tagName: img
+                    type: element
+                href: https://brattlefilm.org/
+                rel: home
+                tagName: a
+                type: element
+            class: site-title
+            data-has-mobile: ''
+            tagName: div
+            type: element
+        class: site-branding
+        role: banner
+        tagName: div
+        type: element
+      - children:
+          - children:
+              - children:
+                  - d: M22.152 3.814c5.12 5.12 5.12 13.312.068 18.363l-9.216 9.216-9.215-9.216c-5.052-5.051-5.052-13.243 0-18.294l.068-.069c5.051-5.051 13.175-5.12 18.295 0-.069-.068-.069-.068 0 0z
+                    tagName: path
+                    type: element
+                  - cx: '13.004'
+                    cy: '12.962'
+                    r: '3.413'
+                    tagName: circle
+                    type: element
+                fill: none
+                fill-rule: evenodd
+                stroke: currentcolor
+                stroke-width: '2'
+                tagName: g
+                transform: translate(1 1)
+                type: element
+            height: '34'
+            tagName: svg
+            type: element
+            viewBox: 0 0 28 34
+            width: '28'
+            xmlns: http://www.w3.org/2000/svg
+          - content: |-
+              40 Brattle St.
+              Cambridge, MA 02138
+            type: text
+        href: https://maps.google.com/?q=40%20Brattle%20St.Cambridge,%20MA%2002138
+        tagName: a
+        target: _blank
+        textContent: |-
+          40 Brattle St.
+          Cambridge, MA 02138
+        type: element
+      - children:
+          - children:
+              - children:
+                  - content: Home
+                    type: text
+                href: https://brattlefilm.org/
+                tagName: a
+                textContent: Home
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-11774
+            id: menu-item-11774
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Coming Soon
+                    type: text
+                href: https://brattlefilm.org/coming-soon/
+                tagName: a
+                textContent: Coming Soon
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12412
+            id: menu-item-12412
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Programs
+                    type: text
+                href: https://brattlefilm.org/film-series/
+                tagName: a
+                textContent: Programs
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - content: Series
+                            type: text
+                        href: https://brattlefilm.org/film-series/
+                        tagName: a
+                        textContent: Series
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-59801
+                    id: menu-item-59801
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Podcast
+                            type: text
+                        href: https://brattlefilm.org/category/podcast/
+                        tagName: a
+                        textContent: Podcast
+                        type: element
+                    class: menu-item menu-item-type-custom menu-item-object-custom menu-item-12841
+                    id: menu-item-12841
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Current Calendar PDF
+                            type: text
+                        href: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/18132436/1.25-BRAT-CAL-WORKING.pdf
+                        tagName: a
+                        textContent: Current Calendar PDF
+                        type: element
+                    class: menu-item menu-item-type-custom menu-item-object-custom menu-item-89822
+                    id: menu-item-89822
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Calendar Archive
+                            type: text
+                        href: https://brattlefilm.org/print-calendar-archive/
+                        tagName: a
+                        textContent: Calendar Archive
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-35566
+                    id: menu-item-35566
+                    tagName: li
+                    type: element
+                class: sub-menu
+                tagName: ul
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-11773
+            id: menu-item-11773
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Join
+                    type: text
+                href: https://brattlefilm.org/memberships/
+                tagName: a
+                textContent: Join
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12037
+            id: menu-item-12037
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: About
+                    type: text
+                href: https://brattlefilm.org/about/
+                tagName: a
+                textContent: About
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - content: News
+                            type: text
+                        href: https://brattlefilm.org/podcasts-news/
+                        tagName: a
+                        textContent: News
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page current_page_parent menu-item-14455
+                    id: menu-item-14455
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Location
+                            type: text
+                        href: https://brattlefilm.org/location/
+                        tagName: a
+                        textContent: Location
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12873
+                    id: menu-item-12873
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Policies
+                            type: text
+                        href: https://brattlefilm.org/about/policies/
+                        tagName: a
+                        textContent: Policies
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-698350
+                    id: menu-item-698350
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Accessibility
+                            type: text
+                        href: https://brattlefilm.org/location/#accessible
+                        tagName: a
+                        textContent: Accessibility
+                        type: element
+                    class: menu-item menu-item-type-custom menu-item-object-custom menu-item-12546
+                    id: menu-item-12546
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Contact & Connect
+                            type: text
+                        href: https://brattlefilm.org/about/contact-2/
+                        tagName: a
+                        textContent: Contact & Connect
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-11963
+                    id: menu-item-11963
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Employment
+                            type: text
+                        href: https://brattlefilm.org/about/employment/
+                        tagName: a
+                        textContent: Employment
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-266966
+                    id: menu-item-266966
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Foundation
+                            type: text
+                        href: https://brattlefilm.org/about/the-brattle-film-foundation/
+                        tagName: a
+                        textContent: Foundation
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12555
+                    id: menu-item-12555
+                    tagName: li
+                    type: element
+                  - children:
+                      - children:
+                          - content: Annual Reports
+                            type: text
+                        href: https://brattlefilm.org/about/annual-reports/
+                        tagName: a
+                        textContent: Annual Reports
+                        type: element
+                    class: menu-item menu-item-type-post_type menu-item-object-page menu-item-28670
+                    id: menu-item-28670
+                    tagName: li
+                    type: element
+                class: sub-menu
+                tagName: ul
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children menu-item-11776
+            id: menu-item-11776
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Merch
+                    type: text
+                href: https://brattle-theatre.square.site/
+                tagName: a
+                textContent: Merch
+                type: element
+            class: menu-item menu-item-type-custom menu-item-object-custom menu-item-11954
+            id: menu-item-11954
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Donate
+                    type: text
+                href: https://brattlefilm.org/donate-2/
+                tagName: a
+                textContent: Donate
+                type: element
+            class: menu-item menu-item-type-custom menu-item-object-custom menu-item-12195
+            id: menu-item-12195
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Rentals
+                    type: text
+                href: https://brattlefilm.org/private-rentals/
+                tagName: a
+                textContent: Rentals
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12776
+            id: menu-item-12776
+            tagName: li
+            type: element
+        class: menu
+        id: menu-main-menu
+        tagName: ul
+        type: element
+      - children:
+          - children:
+              - children:
+                  - content: The Brattle Film Foundation
+                    type: text
+                href: https://brattlefilm.org/about/the-brattle-film-foundation/
+                tagName: a
+                textContent: The Brattle Film Foundation
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12556
+            id: menu-item-12556
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Location & Accessibility
+                    type: text
+                href: https://brattlefilm.org/location/
+                tagName: a
+                textContent: Location & Accessibility
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12869
+            id: menu-item-12869
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Contact & Connect
+                    type: text
+                href: https://brattlefilm.org/about/contact-2/
+                tagName: a
+                textContent: Contact & Connect
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12528
+            id: menu-item-12528
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Policies
+                    type: text
+                href: https://brattlefilm.org/about/policies/
+                tagName: a
+                textContent: Policies
+                type: element
+            class: menu-item menu-item-type-post_type menu-item-object-page menu-item-698349
+            id: menu-item-698349
+            tagName: li
+            type: element
+          - children:
+              - children:
+                  - content: Subscribe to Our Email Newsletter
+                    type: text
+                href: https://mailchi.mp/brattlefilm/email-subscriber-form
+                tagName: a
+                textContent: Subscribe to Our Email Newsletter
+                type: element
+            class: menu-item menu-item-type-custom menu-item-object-custom menu-item-698597
+            id: menu-item-698597
+            tagName: li
+            type: element
+        class: menu
+        id: menu-footer
+        tagName: ul
+        type: element
+      - aria-label: Social media profiles
+        children:
+          - children:
+              - children:
+                  - children:
+                      - children:
+                          - children:
+                              - d: M10 0C4.478 0 0 4.478 0 10v16c0 5.522 4.478 10 10 10h16c5.522 0 10-4.478 10-10V10c0-5.522-4.478-10-10-10H10zm0 4h16a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6V10a6 6 0 0 1 6-6z
+                                fill-rule: nonzero
+                                tagName: path
+                                type: element
+                              - d: M26.174 11.826a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-12 6a4 4 0 1 1 8 0 4 4 0 0 1-8 0zm4-8a8 8 0 1 0 0 16 8 8 0 0 0 0-16z
+                                tagName: path
+                                type: element
+                            fill: currentcolor
+                            fill-rule: evenodd
+                            tagName: g
+                            type: element
+                        height: '36'
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 36 36
+                        width: '36'
+                        xmlns: http://www.w3.org/2000/svg
+                      - children:
+                          - content: instagram
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: instagram
+                        type: element
+                    class: instagram
+                    href: https://www.instagram.com/brattletheatre
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - children:
+                              - d: M18 3.6C10.047 3.6 3.6 10.047 3.6 18S10.047 32.4 18 32.4 32.4 25.953 32.4 18 25.953 3.6 18 3.6zM0 18C0 8.059 8.059 0 18 0s18 8.059 18 18-8.059 18-18 18S0 27.941 0 18z
+                                tagName: path
+                                type: element
+                              - d: M19.337 31.567v-8.75h3.703v-5.316h-3.703v-1.772c0-1.01.89-1.774 1.852-1.773h1.851V8.64h-3.703c-3.145.034-5.534 2.42-5.554 5.316v3.545H10.08v5.316h3.703v8.423a15.62 15.62 0 0 0 5.554.327z
+                                tagName: path
+                                type: element
+                            fill: currentcolor
+                            fill-rule: evenodd
+                            tagName: g
+                            type: element
+                        height: '36'
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 36 36
+                        width: '36'
+                        xmlns: http://www.w3.org/2000/svg
+                      - children:
+                          - content: facebook
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: facebook
+                        type: element
+                    class: facebook
+                    href: https://www.facebook.com/brattletheatre
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - children:
+                              - cx: '250'
+                                cy: '250'
+                                fill: currentColor
+                                id: Circle
+                                r: '250'
+                                tagName: circle
+                                type: element
+                              - children:
+                                  - cx: '189'
+                                    cy: '70'
+                                    fill: none
+                                    id: Green
+                                    rx: '70.0786517'
+                                    ry: '70'
+                                    tagName: ellipse
+                                    type: element
+                                  - children:
+                                      - cx: '59.7686766'
+                                        cy: '70'
+                                        fill: none
+                                        mask: url(#mask-2)
+                                        rx: '70.0786517'
+                                        ry: '70'
+                                        tagName: ellipse
+                                        type: element
+                                    id: Blue
+                                    tagName: g
+                                    transform: translate(248.152672, 0.000000)
+                                    type: element
+                                  - cx: '70.0786517'
+                                    cy: '70'
+                                    fill: none
+                                    mask: url(#mask-4)
+                                    rx: '70.0786517'
+                                    ry: '70'
+                                    tagName: ellipse
+                                    type: element
+                                  - class: overlap
+                                    d: M129.539326,107.063108 C122.810493,96.3149291 118.921348,83.611134 118.921348,70 C118.921348,56.388866 122.810493,43.6850709 129.539326,32.9368922 C136.268159,43.6850709 140.157303,56.388866 140.157303,70 C140.157303,83.611134 136.268159,96.3149291 129.539326,107.063108 L129.539326,107.063108 Z
+                                    fill: none
+                                    tagName: path
+                                    type: element
+                                  - class: overlap
+                                    d: M248.460674,32.9368922 C255.189507,43.6850709 259.078652,56.388866 259.078652,70 C259.078652,83.611134 255.189507,96.3149291 248.460674,107.063108 C241.731841,96.3149291 237.842697,83.611134 237.842697,70 C237.842697,56.388866 241.731841,43.6850709 248.460674,32.9368922 L248.460674,32.9368922 Z
+                                    fill: none
+                                    tagName: path
+                                    type: element
+                                class: dots
+                                tagName: g
+                                transform: translate(61.000000, 180.000000)
+                                type: element
+                            fill: currentColor
+                            fill-rule: evenodd
+                            stroke: none
+                            stroke-width: '1'
+                            tagName: g
+                            type: element
+                        class: letterboxd
+                        height: 500px
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 500 500
+                        width: 500px
+                        xmlns: http://www.w3.org/2000/svg
+                        xmlns:xlink: http://www.w3.org/1999/xlink
+                      - children:
+                          - content: letterboxd
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: letterboxd
+                        type: element
+                    class: letterboxd
+                    href: https://letterboxd.com/brattletheatre/
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - d: 'M 8.144531 2.660156 C 12.132812 5.671875 16.425781 11.785156 18 15.0625 C 19.574219 11.785156 23.867188 5.671875 27.855469 2.660156 C 30.734375 0.484375 35.398438 -1.199219 35.398438 4.15625 C 35.398438 5.226562 34.789062 13.140625 34.433594 14.425781 C 33.191406 18.890625 28.664062 20.03125 24.636719 19.339844 C 31.675781 20.546875 33.464844 24.539062 29.601562 28.53125 C 22.257812 36.113281 19.046875 26.628906 18.222656 24.199219 C 18.070312 23.753906 18 23.542969 18 23.722656 C 18 23.542969 17.929688 23.753906 17.777344 24.199219 C 16.953125 26.628906 13.742188 36.113281 6.398438 28.53125 C 2.53125 24.539062 4.324219 20.546875 11.363281 19.339844 C 7.335938 20.03125 2.808594 18.890625 1.566406 14.425781 C 1.210938 13.140625 0.601562 5.226562 0.601562 4.15625 C 0.601562 -1.199219 5.265625 0.484375 8.144531 2.660156 Z M 8.144531 2.660156 '
+                            tagName: path
+                            type: element
+                        height: '32'
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 36 32
+                        width: '36'
+                        xml:space: preserve
+                        xmlns: http://www.w3.org/2000/svg
+                      - children:
+                          - content: bluesky
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: bluesky
+                        type: element
+                    class: bluesky
+                    href: https://bsky.app/profile/brattletheatre.bsky.social
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+            tagName: ul
+            type: element
+        id: social-nav
+        tagName: nav
+        type: element
+    id: main-nav
+    tagName: nav
+    type: element
+  - children:
+      - children:
+          - children:
+              - children:
+                  - d: M22.152 3.814c5.12 5.12 5.12 13.312.068 18.363l-9.216 9.216-9.215-9.216c-5.052-5.051-5.052-13.243 0-18.294l.068-.069c5.051-5.051 13.175-5.12 18.295 0-.069-.068-.069-.068 0 0z
+                    tagName: path
+                    type: element
+                  - cx: '13.004'
+                    cy: '12.962'
+                    r: '3.413'
+                    tagName: circle
+                    type: element
+                fill: none
+                fill-rule: evenodd
+                stroke: currentcolor
+                stroke-width: '2'
+                tagName: g
+                transform: translate(1 1)
+                type: element
+            height: '34'
+            tagName: svg
+            type: element
+            viewBox: 0 0 28 34
+            width: '28'
+            xmlns: http://www.w3.org/2000/svg
+          - content: |-
+              40 Brattle St.
+              Cambridge, MA 02138
+            type: text
+        href: https://maps.google.com/?q=40%20Brattle%20St.Cambridge,%20MA%2002138
+        tagName: a
+        target: _blank
+        textContent: |-
+          40 Brattle St.
+          Cambridge, MA 02138
+        type: element
+      - children:
+          - children:
+              - children:
+                  - alt: The Brattle
+                    src: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2023/11/03001806/Brattle-logo.png
+                    tagName: img
+                    type: element
+                href: https://brattlefilm.org/
+                rel: home
+                tagName: a
+                type: element
+            class: site-title
+            data-has-mobile: ''
+            tagName: div
+            type: element
+        class: site-branding
+        role: banner
+        tagName: div
+        type: element
+      - aria-label: Social media profiles
+        children:
+          - children:
+              - children:
+                  - children:
+                      - children:
+                          - children:
+                              - d: M10 0C4.478 0 0 4.478 0 10v16c0 5.522 4.478 10 10 10h16c5.522 0 10-4.478 10-10V10c0-5.522-4.478-10-10-10H10zm0 4h16a6 6 0 0 1 6 6v16a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6V10a6 6 0 0 1 6-6z
+                                fill-rule: nonzero
+                                tagName: path
+                                type: element
+                              - d: M26.174 11.826a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-12 6a4 4 0 1 1 8 0 4 4 0 0 1-8 0zm4-8a8 8 0 1 0 0 16 8 8 0 0 0 0-16z
+                                tagName: path
+                                type: element
+                            fill: currentcolor
+                            fill-rule: evenodd
+                            tagName: g
+                            type: element
+                        height: '36'
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 36 36
+                        width: '36'
+                        xmlns: http://www.w3.org/2000/svg
+                      - children:
+                          - content: instagram
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: instagram
+                        type: element
+                    class: instagram
+                    href: https://www.instagram.com/brattletheatre
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - children:
+                              - d: M18 3.6C10.047 3.6 3.6 10.047 3.6 18S10.047 32.4 18 32.4 32.4 25.953 32.4 18 25.953 3.6 18 3.6zM0 18C0 8.059 8.059 0 18 0s18 8.059 18 18-8.059 18-18 18S0 27.941 0 18z
+                                tagName: path
+                                type: element
+                              - d: M19.337 31.567v-8.75h3.703v-5.316h-3.703v-1.772c0-1.01.89-1.774 1.852-1.773h1.851V8.64h-3.703c-3.145.034-5.534 2.42-5.554 5.316v3.545H10.08v5.316h3.703v8.423a15.62 15.62 0 0 0 5.554.327z
+                                tagName: path
+                                type: element
+                            fill: currentcolor
+                            fill-rule: evenodd
+                            tagName: g
+                            type: element
+                        height: '36'
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 36 36
+                        width: '36'
+                        xmlns: http://www.w3.org/2000/svg
+                      - children:
+                          - content: facebook
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: facebook
+                        type: element
+                    class: facebook
+                    href: https://www.facebook.com/brattletheatre
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - children:
+                              - cx: '250'
+                                cy: '250'
+                                fill: currentColor
+                                id: Circle
+                                r: '250'
+                                tagName: circle
+                                type: element
+                              - children:
+                                  - cx: '189'
+                                    cy: '70'
+                                    fill: none
+                                    id: Green
+                                    rx: '70.0786517'
+                                    ry: '70'
+                                    tagName: ellipse
+                                    type: element
+                                  - children:
+                                      - cx: '59.7686766'
+                                        cy: '70'
+                                        fill: none
+                                        mask: url(#mask-2)
+                                        rx: '70.0786517'
+                                        ry: '70'
+                                        tagName: ellipse
+                                        type: element
+                                    id: Blue
+                                    tagName: g
+                                    transform: translate(248.152672, 0.000000)
+                                    type: element
+                                  - cx: '70.0786517'
+                                    cy: '70'
+                                    fill: none
+                                    mask: url(#mask-4)
+                                    rx: '70.0786517'
+                                    ry: '70'
+                                    tagName: ellipse
+                                    type: element
+                                  - class: overlap
+                                    d: M129.539326,107.063108 C122.810493,96.3149291 118.921348,83.611134 118.921348,70 C118.921348,56.388866 122.810493,43.6850709 129.539326,32.9368922 C136.268159,43.6850709 140.157303,56.388866 140.157303,70 C140.157303,83.611134 136.268159,96.3149291 129.539326,107.063108 L129.539326,107.063108 Z
+                                    fill: none
+                                    tagName: path
+                                    type: element
+                                  - class: overlap
+                                    d: M248.460674,32.9368922 C255.189507,43.6850709 259.078652,56.388866 259.078652,70 C259.078652,83.611134 255.189507,96.3149291 248.460674,107.063108 C241.731841,96.3149291 237.842697,83.611134 237.842697,70 C237.842697,56.388866 241.731841,43.6850709 248.460674,32.9368922 L248.460674,32.9368922 Z
+                                    fill: none
+                                    tagName: path
+                                    type: element
+                                class: dots
+                                tagName: g
+                                transform: translate(61.000000, 180.000000)
+                                type: element
+                            fill: currentColor
+                            fill-rule: evenodd
+                            stroke: none
+                            stroke-width: '1'
+                            tagName: g
+                            type: element
+                        class: letterboxd
+                        height: 500px
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 500 500
+                        width: 500px
+                        xmlns: http://www.w3.org/2000/svg
+                        xmlns:xlink: http://www.w3.org/1999/xlink
+                      - children:
+                          - content: letterboxd
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: letterboxd
+                        type: element
+                    class: letterboxd
+                    href: https://letterboxd.com/brattletheatre/
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - children:
+                          - d: 'M 8.144531 2.660156 C 12.132812 5.671875 16.425781 11.785156 18 15.0625 C 19.574219 11.785156 23.867188 5.671875 27.855469 2.660156 C 30.734375 0.484375 35.398438 -1.199219 35.398438 4.15625 C 35.398438 5.226562 34.789062 13.140625 34.433594 14.425781 C 33.191406 18.890625 28.664062 20.03125 24.636719 19.339844 C 31.675781 20.546875 33.464844 24.539062 29.601562 28.53125 C 22.257812 36.113281 19.046875 26.628906 18.222656 24.199219 C 18.070312 23.753906 18 23.542969 18 23.722656 C 18 23.542969 17.929688 23.753906 17.777344 24.199219 C 16.953125 26.628906 13.742188 36.113281 6.398438 28.53125 C 2.53125 24.539062 4.324219 20.546875 11.363281 19.339844 C 7.335938 20.03125 2.808594 18.890625 1.566406 14.425781 C 1.210938 13.140625 0.601562 5.226562 0.601562 4.15625 C 0.601562 -1.199219 5.265625 0.484375 8.144531 2.660156 Z M 8.144531 2.660156 '
+                            tagName: path
+                            type: element
+                        height: '32'
+                        tagName: svg
+                        type: element
+                        viewBox: 0 0 36 32
+                        width: '36'
+                        xml:space: preserve
+                        xmlns: http://www.w3.org/2000/svg
+                      - children:
+                          - content: bluesky
+                            type: text
+                        class: screen-reader-text
+                        tagName: span
+                        textContent: bluesky
+                        type: element
+                    class: bluesky
+                    href: https://bsky.app/profile/brattletheatre.bsky.social
+                    tagName: a
+                    target: _blank
+                    type: element
+                tagName: li
+                type: element
+            tagName: ul
+            type: element
+        id: social-nav
+        tagName: nav
+        type: element
+    class: site-header
+    tagName: header
+    type: element
+  - children:
+      - children:
+          - children:
+              - children:
+                  - children:
+                      - content: Checkout
+                        type: text
+                    tagName: h1
+                    textContent: Checkout
+                    type: element
+                class: page-header
+                tagName: header
+                type: element
+              - children:
+                  - - children:
+                        - alt: Poster for The Sacrifice
+                          class: attachment-full size-full wp-post-image
+                          decoding: async
+                          height: '2560'
+                          loading: lazy
+                          sizes: '(max-width: 1707px) 100vw, 1707px'
+                          src: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-scaled.jpg
+                          srcset: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-scaled.jpg 1707w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-200x300.jpg 200w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-683x1024.jpg 683w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-768x1152.jpg 768w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-1024x1536.jpg 1024w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-1365x2048.jpg 1365w
+                          tagName: img
+                          type: element
+                          width: '1707'
+                      href: https://brattlefilm.org/movies/the-sacrifice/
+                      tagName: a
+                      type: element
+                    - children:
+                        - children:
+                            - children:
+                                - content: Movie
+                                  type: text
+                              class: label
+                              tagName: span
+                              textContent: Movie
+                              type: element
+                            - children:
+                                - content: The Sacrifice
+                                  type: text
+                              href: https://brattlefilm.org/movies/the-sacrifice/
+                              tagName: a
+                              textContent: The Sacrifice
+                              type: element
+                          class: show_title
+                          tagName: li
+                          type: element
+                        - children:
+                            - children:
+                                - content: Date & Time
+                                  type: text
+                              class: label
+                              tagName: span
+                              textContent: Date & Time
+                              type: element
+                            - children:
+                                - content: Mon,  Jan 6 @ 8:00 pm
+                                  type: text
+                              class: data
+                              tagName: span
+                              textContent: Mon,  Jan 6 @ 8:00 pm
+                              type: element
+                          class: show_time
+                          tagName: li
+                          type: element
+                      class: post-990351 movie type-movie status-publish has-post-thumbnail hentry genre-drama series-special-engagements
+                      tagName: ul
+                      type: element
+                  - - children:
+                        - content: SELECT QUANTITY OF TICKETS
+                          type: text
+                      class: error-message
+                      role: alert
+                      tagName: div
+                      textContent: SELECT QUANTITY OF TICKETS
+                      type: element
+                    - - children:
+                          - content: General Admission –
+                            type: text
+                          - tagName: br
+                            type: element
+                          - content: $15.00
+                            type: text
+                          - tagName: span
+                            type: element
+                        for: quantity-general-admission-2
+                        tagName: label
+                        textContent: General Admission – $15.00
+                        type: element
+                      - - children:
+                            - content: Choose General Admission – ticket quantity
+                              type: text
+                          class: screen-reader-text
+                          id: choose-quantity-general-admission-2
+                          tagName: span
+                          textContent: Choose General Admission – ticket quantity
+                          type: element
+                        - aria-describedby: choose-quantity-general-admission-2
+                          children:
+                            - children:
+                                - content: '0'
+                                  type: text
+                              tagName: option
+                              textContent: '0'
+                              type: element
+                              value: '0'
+                            - children:
+                                - content: '1'
+                                  type: text
+                              tagName: option
+                              textContent: '1'
+                              type: element
+                              value: '1'
+                            - children:
+                                - content: '2'
+                                  type: text
+                              tagName: option
+                              textContent: '2'
+                              type: element
+                              value: '2'
+                            - children:
+                                - content: '3'
+                                  type: text
+                              tagName: option
+                              textContent: '3'
+                              type: element
+                              value: '3'
+                            - children:
+                                - content: '4'
+                                  type: text
+                              tagName: option
+                              textContent: '4'
+                              type: element
+                              value: '4'
+                            - children:
+                                - content: '5'
+                                  type: text
+                              tagName: option
+                              textContent: '5'
+                              type: element
+                              value: '5'
+                            - children:
+                                - content: '6'
+                                  type: text
+                              tagName: option
+                              textContent: '6'
+                              type: element
+                              value: '6'
+                            - children:
+                                - content: '7'
+                                  type: text
+                              tagName: option
+                              textContent: '7'
+                              type: element
+                              value: '7'
+                            - children:
+                                - content: '8'
+                                  type: text
+                              tagName: option
+                              textContent: '8'
+                              type: element
+                              value: '8'
+                            - children:
+                                - content: '9'
+                                  type: text
+                              tagName: option
+                              textContent: '9'
+                              type: element
+                              value: '9'
+                          data-ticket_type: '{"name":"general-admission-2","price":"15"}'
+                          disabled: false
+                          id: quantity-general-admission-2
+                          name: quantity[general-admission-2]
+                          tabindex: '0'
+                          tagName: select
+                          type: element
+                          value: '0'
+                        - children:
+                            - d: M25.513.988a1.812 1.812 0 0 1 2.474 0c.684.651.684 1.706 0 2.357l-12.25 11.667c-.683.65-1.791.65-2.474 0L1.013 3.345a1.611 1.611 0 0 1 0-2.357 1.812 1.812 0 0 1 2.474 0L14.5 11.476 25.513.988z
+                              fill: currentColor
+                              tagName: path
+                              type: element
+                          height: '16'
+                          tagName: svg
+                          type: element
+                          viewBox: 0 0 29 16
+                          width: '29'
+                          xmlns: http://www.w3.org/2000/svg
+                    - - children:
+                          - content: Child –
+                            type: text
+                          - tagName: br
+                            type: element
+                          - content: $13.00
+                            type: text
+                          - tagName: span
+                            type: element
+                        for: quantity-child
+                        tagName: label
+                        textContent: Child – $13.00
+                        type: element
+                      - - children:
+                            - content: Choose Child – ticket quantity
+                              type: text
+                          class: screen-reader-text
+                          id: choose-quantity-child
+                          tagName: span
+                          textContent: Choose Child – ticket quantity
+                          type: element
+                        - aria-describedby: choose-quantity-child
+                          children:
+                            - children:
+                                - content: '0'
+                                  type: text
+                              tagName: option
+                              textContent: '0'
+                              type: element
+                              value: '0'
+                            - children:
+                                - content: '1'
+                                  type: text
+                              tagName: option
+                              textContent: '1'
+                              type: element
+                              value: '1'
+                            - children:
+                                - content: '2'
+                                  type: text
+                              tagName: option
+                              textContent: '2'
+                              type: element
+                              value: '2'
+                            - children:
+                                - content: '3'
+                                  type: text
+                              tagName: option
+                              textContent: '3'
+                              type: element
+                              value: '3'
+                            - children:
+                                - content: '4'
+                                  type: text
+                              tagName: option
+                              textContent: '4'
+                              type: element
+                              value: '4'
+                            - children:
+                                - content: '5'
+                                  type: text
+                              tagName: option
+                              textContent: '5'
+                              type: element
+                              value: '5'
+                            - children:
+                                - content: '6'
+                                  type: text
+                              tagName: option
+                              textContent: '6'
+                              type: element
+                              value: '6'
+                            - children:
+                                - content: '7'
+                                  type: text
+                              tagName: option
+                              textContent: '7'
+                              type: element
+                              value: '7'
+                            - children:
+                                - content: '8'
+                                  type: text
+                              tagName: option
+                              textContent: '8'
+                              type: element
+                              value: '8'
+                            - children:
+                                - content: '9'
+                                  type: text
+                              tagName: option
+                              textContent: '9'
+                              type: element
+                              value: '9'
+                          data-ticket_type: '{"name":"child","price":"13"}'
+                          disabled: false
+                          id: quantity-child
+                          name: quantity[child]
+                          tabindex: '0'
+                          tagName: select
+                          type: element
+                          value: '0'
+                        - children:
+                            - d: M25.513.988a1.812 1.812 0 0 1 2.474 0c.684.651.684 1.706 0 2.357l-12.25 11.667c-.683.65-1.791.65-2.474 0L1.013 3.345a1.611 1.611 0 0 1 0-2.357 1.812 1.812 0 0 1 2.474 0L14.5 11.476 25.513.988z
+                              fill: currentColor
+                              tagName: path
+                              type: element
+                          height: '16'
+                          tagName: svg
+                          type: element
+                          viewBox: 0 0 29 16
+                          width: '29'
+                          xmlns: http://www.w3.org/2000/svg
+                    - - children:
+                          - content: Member –
+                            type: text
+                          - tagName: br
+                            type: element
+                          - content: $13.00
+                            type: text
+                          - tagName: span
+                            type: element
+                        for: quantity-member
+                        tagName: label
+                        textContent: Member – $13.00
+                        type: element
+                      - - children:
+                            - content: Choose Member – ticket quantity
+                              type: text
+                          class: screen-reader-text
+                          id: choose-quantity-member
+                          tagName: span
+                          textContent: Choose Member – ticket quantity
+                          type: element
+                        - aria-describedby: choose-quantity-member
+                          children:
+                            - children:
+                                - content: '0'
+                                  type: text
+                              tagName: option
+                              textContent: '0'
+                              type: element
+                              value: '0'
+                            - children:
+                                - content: '1'
+                                  type: text
+                              tagName: option
+                              textContent: '1'
+                              type: element
+                              value: '1'
+                            - children:
+                                - content: '2'
+                                  type: text
+                              tagName: option
+                              textContent: '2'
+                              type: element
+                              value: '2'
+                            - children:
+                                - content: '3'
+                                  type: text
+                              tagName: option
+                              textContent: '3'
+                              type: element
+                              value: '3'
+                            - children:
+                                - content: '4'
+                                  type: text
+                              tagName: option
+                              textContent: '4'
+                              type: element
+                              value: '4'
+                            - children:
+                                - content: '5'
+                                  type: text
+                              tagName: option
+                              textContent: '5'
+                              type: element
+                              value: '5'
+                            - children:
+                                - content: '6'
+                                  type: text
+                              tagName: option
+                              textContent: '6'
+                              type: element
+                              value: '6'
+                            - children:
+                                - content: '7'
+                                  type: text
+                              tagName: option
+                              textContent: '7'
+                              type: element
+                              value: '7'
+                            - children:
+                                - content: '8'
+                                  type: text
+                              tagName: option
+                              textContent: '8'
+                              type: element
+                              value: '8'
+                            - children:
+                                - content: '9'
+                                  type: text
+                              tagName: option
+                              textContent: '9'
+                              type: element
+                              value: '9'
+                          data-ticket_type: '{"name":"member","price":"13"}'
+                          disabled: false
+                          id: quantity-member
+                          name: quantity[member]
+                          tabindex: '0'
+                          tagName: select
+                          type: element
+                          value: '0'
+                        - children:
+                            - d: M25.513.988a1.812 1.812 0 0 1 2.474 0c.684.651.684 1.706 0 2.357l-12.25 11.667c-.683.65-1.791.65-2.474 0L1.013 3.345a1.611 1.611 0 0 1 0-2.357 1.812 1.812 0 0 1 2.474 0L14.5 11.476 25.513.988z
+                              fill: currentColor
+                              tagName: path
+                              type: element
+                          height: '16'
+                          tagName: svg
+                          type: element
+                          viewBox: 0 0 29 16
+                          width: '29'
+                          xmlns: http://www.w3.org/2000/svg
+                    - - children:
+                          - content: Senior –
+                            type: text
+                          - tagName: br
+                            type: element
+                          - content: $13.00
+                            type: text
+                          - tagName: span
+                            type: element
+                        for: quantity-senior
+                        tagName: label
+                        textContent: Senior – $13.00
+                        type: element
+                      - - children:
+                            - content: Choose Senior – ticket quantity
+                              type: text
+                          class: screen-reader-text
+                          id: choose-quantity-senior
+                          tagName: span
+                          textContent: Choose Senior – ticket quantity
+                          type: element
+                        - aria-describedby: choose-quantity-senior
+                          children:
+                            - children:
+                                - content: '0'
+                                  type: text
+                              tagName: option
+                              textContent: '0'
+                              type: element
+                              value: '0'
+                            - children:
+                                - content: '1'
+                                  type: text
+                              tagName: option
+                              textContent: '1'
+                              type: element
+                              value: '1'
+                            - children:
+                                - content: '2'
+                                  type: text
+                              tagName: option
+                              textContent: '2'
+                              type: element
+                              value: '2'
+                            - children:
+                                - content: '3'
+                                  type: text
+                              tagName: option
+                              textContent: '3'
+                              type: element
+                              value: '3'
+                            - children:
+                                - content: '4'
+                                  type: text
+                              tagName: option
+                              textContent: '4'
+                              type: element
+                              value: '4'
+                            - children:
+                                - content: '5'
+                                  type: text
+                              tagName: option
+                              textContent: '5'
+                              type: element
+                              value: '5'
+                            - children:
+                                - content: '6'
+                                  type: text
+                              tagName: option
+                              textContent: '6'
+                              type: element
+                              value: '6'
+                            - children:
+                                - content: '7'
+                                  type: text
+                              tagName: option
+                              textContent: '7'
+                              type: element
+                              value: '7'
+                            - children:
+                                - content: '8'
+                                  type: text
+                              tagName: option
+                              textContent: '8'
+                              type: element
+                              value: '8'
+                            - children:
+                                - content: '9'
+                                  type: text
+                              tagName: option
+                              textContent: '9'
+                              type: element
+                              value: '9'
+                          data-ticket_type: '{"name":"senior","price":"13"}'
+                          disabled: false
+                          id: quantity-senior
+                          name: quantity[senior]
+                          tabindex: '0'
+                          tagName: select
+                          type: element
+                          value: '0'
+                        - children:
+                            - d: M25.513.988a1.812 1.812 0 0 1 2.474 0c.684.651.684 1.706 0 2.357l-12.25 11.667c-.683.65-1.791.65-2.474 0L1.013 3.345a1.611 1.611 0 0 1 0-2.357 1.812 1.812 0 0 1 2.474 0L14.5 11.476 25.513.988z
+                              fill: currentColor
+                              tagName: path
+                              type: element
+                          height: '16'
+                          tagName: svg
+                          type: element
+                          viewBox: 0 0 29 16
+                          width: '29'
+                          xmlns: http://www.w3.org/2000/svg
+                    - - children:
+                          - content: Student –
+                            type: text
+                          - tagName: br
+                            type: element
+                          - content: $13.00
+                            type: text
+                          - tagName: span
+                            type: element
+                        for: quantity-student
+                        tagName: label
+                        textContent: Student – $13.00
+                        type: element
+                      - - children:
+                            - content: Choose Student – ticket quantity
+                              type: text
+                          class: screen-reader-text
+                          id: choose-quantity-student
+                          tagName: span
+                          textContent: Choose Student – ticket quantity
+                          type: element
+                        - aria-describedby: choose-quantity-student
+                          children:
+                            - children:
+                                - content: '0'
+                                  type: text
+                              tagName: option
+                              textContent: '0'
+                              type: element
+                              value: '0'
+                            - children:
+                                - content: '1'
+                                  type: text
+                              tagName: option
+                              textContent: '1'
+                              type: element
+                              value: '1'
+                            - children:
+                                - content: '2'
+                                  type: text
+                              tagName: option
+                              textContent: '2'
+                              type: element
+                              value: '2'
+                            - children:
+                                - content: '3'
+                                  type: text
+                              tagName: option
+                              textContent: '3'
+                              type: element
+                              value: '3'
+                            - children:
+                                - content: '4'
+                                  type: text
+                              tagName: option
+                              textContent: '4'
+                              type: element
+                              value: '4'
+                            - children:
+                                - content: '5'
+                                  type: text
+                              tagName: option
+                              textContent: '5'
+                              type: element
+                              value: '5'
+                            - children:
+                                - content: '6'
+                                  type: text
+                              tagName: option
+                              textContent: '6'
+                              type: element
+                              value: '6'
+                            - children:
+                                - content: '7'
+                                  type: text
+                              tagName: option
+                              textContent: '7'
+                              type: element
+                              value: '7'
+                            - children:
+                                - content: '8'
+                                  type: text
+                              tagName: option
+                              textContent: '8'
+                              type: element
+                              value: '8'
+                            - children:
+                                - content: '9'
+                                  type: text
+                              tagName: option
+                              textContent: '9'
+                              type: element
+                              value: '9'
+                          data-ticket_type: '{"name":"student","price":"13"}'
+                          disabled: false
+                          id: quantity-student
+                          name: quantity[student]
+                          tabindex: '0'
+                          tagName: select
+                          type: element
+                          value: '0'
+                        - children:
+                            - d: M25.513.988a1.812 1.812 0 0 1 2.474 0c.684.651.684 1.706 0 2.357l-12.25 11.667c-.683.65-1.791.65-2.474 0L1.013 3.345a1.611 1.611 0 0 1 0-2.357 1.812 1.812 0 0 1 2.474 0L14.5 11.476 25.513.988z
+                              fill: currentColor
+                              tagName: path
+                              type: element
+                          height: '16'
+                          tagName: svg
+                          type: element
+                          viewBox: 0 0 29 16
+                          width: '29'
+                          xmlns: http://www.w3.org/2000/svg
+                  - - children:
+                        - content: The Brattle Theatre does not generally provide advisories about subject matter or potentially triggering content in films, as sensitivities vary from person to person. In addition to the synopses, trailers, and other links on our website, further information about content and age-appropriateness for specific films can be found on
+                          type: text
+                      tagName: span
+                      textContent: The Brattle Theatre does not generally provide advisories about subject matter or potentially triggering content in films, as sensitivities vary from person to person. In addition to the synopses, trailers, and other links on our website, further information about content and age-appropriateness for specific films can be found on
+                      type: element
+                    - children:
+                        - children:
+                            - content: Common Sense Media
+                              type: text
+                          tagName: span
+                          textContent: Common Sense Media
+                          type: element
+                      href: https://www.commonsensemedia.org/
+                      tagName: a
+                      type: element
+                    - children:
+                        - content: ','
+                          type: text
+                      tagName: span
+                      textContent: ','
+                      type: element
+                    - children:
+                        - children:
+                            - content: IMDb
+                              type: text
+                          tagName: span
+                          textContent: IMDb
+                          type: element
+                      href: https://www.imdb.com/
+                      tagName: a
+                      type: element
+                    - children:
+                        - content: ', and'
+                          type: text
+                      tagName: span
+                      textContent: ', and'
+                      type: element
+                    - children:
+                        - children:
+                            - content: DoesTheDogDie.com
+                              type: text
+                          tagName: span
+                          textContent: DoesTheDogDie.com
+                          type: element
+                      href: http://doesthedogdie.com
+                      tagName: a
+                      type: element
+                    - children:
+                        - content: as well as through general internet searches.
+                          type: text
+                      tagName: span
+                      textContent: as well as through general internet searches.
+                      type: element
+                  - autocomplete: 'on'
+                    children:
+                      - children:
+                          - content: Credit Card
+                            type: text
+                        class: selected
+                        data-pmethod: cc
+                        data-target: '#credit-card-inputs'
+                        tagName: a
+                        textContent: Credit Card
+                        type: element
+                      - - - class: stripe-input empty
+                            id: stripe-card-number
+                            tagName: div
+                            type: element
+                          - children:
+                              - content: Card number
+                                type: text
+                            class: ''
+                            for: stripe-card-number
+                            tagName: label
+                            textContent: Card number
+                            type: element
+                          - class: baseline
+                            tagName: div
+                            type: element
+                        - - - class: stripe-input empty
+                              id: stripe-card-expiry
+                              tagName: div
+                              type: element
+                            - children:
+                                - content: Expiration
+                                  type: text
+                              class: ''
+                              for: stripe-card-expiry
+                              tagName: label
+                              textContent: Expiration
+                              type: element
+                            - class: baseline
+                              tagName: div
+                              type: element
+                          - - class: stripe-input empty
+                              id: stripe-card-cvc
+                              tagName: div
+                              type: element
+                            - children:
+                                - content: CVC
+                                  type: text
+                              class: ''
+                              for: stripe-card-cvc
+                              tagName: label
+                              textContent: CVC
+                              type: element
+                            - class: baseline
+                              tagName: div
+                              type: element
+                          - - checked: false
+                              class: input empty
+                              disabled: false
+                              id: postal_code
+                              name: postal_code
+                              readOnly: false
+                              tagName: input
+                              type: element
+                            - children:
+                                - content: Postal Code
+                                  type: text
+                              class: ''
+                              for: postal_code
+                              tagName: label
+                              textContent: Postal Code
+                              type: element
+                            - class: baseline
+                              tagName: div
+                              type: element
+                        - class: error-message
+                          id: card-errors
+                          role: alert
+                          tagName: div
+                          type: element
+                      - - - children:
+                              - content: FIRST NAME
+                                type: text
+                            class: screen-reader-text
+                            for: first_name
+                            tagName: label
+                            textContent: FIRST NAME
+                            type: element
+                          - aria-required: 'true'
+                            checked: false
+                            data-fb-placeholder: ''
+                            disabled: false
+                            id: first_name
+                            placeholder: FIRST NAME*
+                            readOnly: false
+                            required: ''
+                            tagName: input
+                            type: text
+                            value: ''
+                          - children:
+                              - content: FIRST NAME REQUIRED
+                                type: text
+                            class: error-message
+                            role: alert
+                            tagName: div
+                            textContent: FIRST NAME REQUIRED
+                            type: element
+                        - - children:
+                              - content: LAST NAME
+                                type: text
+                            class: screen-reader-text
+                            for: last_name
+                            tagName: label
+                            textContent: LAST NAME
+                            type: element
+                          - aria-required: 'true'
+                            checked: false
+                            data-fb-placeholder: ''
+                            disabled: false
+                            id: last_name
+                            placeholder: LAST NAME*
+                            readOnly: false
+                            required: ''
+                            tagName: input
+                            type: text
+                            value: ''
+                          - children:
+                              - content: LAST NAME REQUIRED
+                                type: text
+                            class: error-message
+                            role: alert
+                            tagName: div
+                            textContent: LAST NAME REQUIRED
+                            type: element
+                      - - children:
+                            - content: EMAIL
+                              type: text
+                          class: screen-reader-text
+                          for: email
+                          tagName: label
+                          textContent: EMAIL
+                          type: element
+                        - aria-required: 'true'
+                          checked: false
+                          data-fb-placeholder: ''
+                          disabled: false
+                          id: email
+                          placeholder: EMAIL*
+                          readOnly: false
+                          required: ''
+                          tagName: input
+                          type: email
+                          value: ''
+                        - children:
+                            - content: EMAIL REQUIRED, SUCH AS JANE@GMAIL.COM
+                              type: text
+                          class: error-message
+                          role: alert
+                          tagName: div
+                          textContent: EMAIL REQUIRED, SUCH AS JANE@GMAIL.COM
+                          type: element
+                      - - children:
+                            - class: toggle-section-icon
+                              tagName: span
+                              type: element
+                            - content: Gift Card
+                              type: text
+                          class: toggle-section-header toggle--closed
+                          role: button
+                          tabindex: '0'
+                          tagName: strong
+                          textContent: Gift Card
+                          type: element
+                        - children:
+                            - children:
+                                - content: GIFT CARD
+                                  type: text
+                              class: screen-reader-text
+                              for: gc
+                              tagName: label
+                              textContent: GIFT CARD
+                              type: element
+                            - autocomplete: 'off'
+                              checked: false
+                              data-fb-placeholder: ''
+                              disabled: false
+                              id: gc
+                              maxlength: '19'
+                              placeholder: GIFT CARD
+                              readOnly: false
+                              tagName: input
+                              type: text
+                              value: ''
+                            - children:
+                                - content: APPLY
+                                  type: text
+                              class: outline-btn
+                              href: '#'
+                              id: apply-gc
+                              tagName: a
+                              textContent: APPLY
+                              type: element
+                            - class: error-message
+                              id: gc-error-message
+                              role: alert
+                              tagName: div
+                              type: element
+                          class: toggle-section toggle--closed
+                          tagName: section
+                          type: element
+                      - - children:
+                            - class: toggle-section-icon
+                              tagName: span
+                              type: element
+                            - content: Promo Code or Member Code
+                              type: text
+                          class: toggle-section-header toggle--closed
+                          role: button
+                          tabindex: '0'
+                          tagName: strong
+                          textContent: Promo Code or Member Code
+                          type: element
+                        - children:
+                            - children:
+                                - content: PROMO CODE OR MEMBER CODE
+                                  type: text
+                              class: screen-reader-text
+                              for: discount-code
+                              tagName: label
+                              textContent: PROMO CODE OR MEMBER CODE
+                              type: element
+                            - autocomplete: 'off'
+                              checked: false
+                              data-fb-placeholder: ''
+                              disabled: false
+                              id: discount-code
+                              placeholder: PROMO/MEMBER CODE
+                              readOnly: false
+                              tagName: input
+                              type: text
+                              value: ''
+                            - children:
+                                - content: APPLY
+                                  type: text
+                              class: outline-btn
+                              href: '#'
+                              id: apply-discount-code
+                              tagName: a
+                              textContent: APPLY
+                              type: element
+                            - class: error-message
+                              id: discount-code-error-message
+                              role: alert
+                              tagName: div
+                              type: element
+                            - class: success-message
+                              id: discount-code-success-message
+                              role: alert
+                              tagName: div
+                              type: element
+                          class: toggle-section toggle--closed
+                          tagName: section
+                          type: element
+                      - children:
+                          - content: Yes, I'd love to add a donation to support The Brattle today!
+                            type: text
+                        class: donation-variants-label
+                        tagName: label
+                        textContent: Yes, I'd love to add a donation to support The Brattle today!
+                        type: element
+                      - - children:
+                            - content: $5.00
+                              type: text
+                          class: donation-variant
+                          data-donation-amount: '5'
+                          tagName: div
+                          textContent: $5.00
+                          type: element
+                        - children:
+                            - content: $10.00
+                              type: text
+                          class: donation-variant
+                          data-donation-amount: '10'
+                          tagName: div
+                          textContent: $10.00
+                          type: element
+                        - children:
+                            - content: $15.00
+                              type: text
+                          class: donation-variant
+                          data-donation-amount: '15'
+                          tagName: div
+                          textContent: $15.00
+                          type: element
+                        - children:
+                            - content: $20.00
+                              type: text
+                          class: donation-variant
+                          data-donation-amount: '20'
+                          tagName: div
+                          textContent: $20.00
+                          type: element
+                        - children:
+                            - content: $
+                              type: text
+                            - checked: false
+                              class: custom-donation-amount
+                              disabled: false
+                              id: custom-donation-amount
+                              readOnly: false
+                              tagName: input
+                              type: text
+                          class: donation-variant custom-donation-variant
+                          data-donation-amount: '0'
+                          tagName: div
+                          textContent: $
+                          type: element
+                      - children:
+                          - children:
+                              - content: 'Tickets:'
+                                type: text
+                            tagName: li
+                            textContent: 'Tickets:'
+                            type: element
+                          - children:
+                              - content: 'TOTAL PRICE:'
+                                type: text
+                            tagName: li
+                            textContent: 'TOTAL PRICE:'
+                            type: element
+                        tagName: ul
+                        type: element
+                      - children:
+                          - children:
+                              - children:
+                                  - content: 'Tickets:'
+                                    type: text
+                                class: label
+                                tagName: div
+                                textContent: 'Tickets:'
+                                type: element
+                              - children:
+                                  - class: quantity
+                                    tagName: span
+                                    type: element
+                                  - content: General Admission – $
+                                    type: text
+                                  - class: subtotal
+                                    tagName: span
+                                    type: element
+                                class: tickets_quantity_subtotal tickets_general-admission-2
+                                tagName: div
+                                textContent: General Admission – $
+                                type: element
+                              - children:
+                                  - class: quantity
+                                    tagName: span
+                                    type: element
+                                  - content: Child – $
+                                    type: text
+                                  - class: subtotal
+                                    tagName: span
+                                    type: element
+                                class: tickets_quantity_subtotal tickets_child
+                                tagName: div
+                                textContent: Child – $
+                                type: element
+                              - children:
+                                  - class: quantity
+                                    tagName: span
+                                    type: element
+                                  - content: Member – $
+                                    type: text
+                                  - class: subtotal
+                                    tagName: span
+                                    type: element
+                                class: tickets_quantity_subtotal tickets_member
+                                tagName: div
+                                textContent: Member – $
+                                type: element
+                              - children:
+                                  - class: quantity
+                                    tagName: span
+                                    type: element
+                                  - content: Senior – $
+                                    type: text
+                                  - class: subtotal
+                                    tagName: span
+                                    type: element
+                                class: tickets_quantity_subtotal tickets_senior
+                                tagName: div
+                                textContent: Senior – $
+                                type: element
+                              - children:
+                                  - class: quantity
+                                    tagName: span
+                                    type: element
+                                  - content: Student – $
+                                    type: text
+                                  - class: subtotal
+                                    tagName: span
+                                    type: element
+                                class: tickets_quantity_subtotal tickets_student
+                                tagName: div
+                                textContent: Student – $
+                                type: element
+                            class: tickets
+                            tagName: li
+                            type: element
+                          - children:
+                              - children:
+                                  - content: 'Booking Fee:'
+                                    type: text
+                                class: label
+                                tagName: div
+                                textContent: 'Booking Fee:'
+                                type: element
+                              - children:
+                                  - content: $
+                                    type: text
+                                  - class: booking_fee_total
+                                    tagName: span
+                                    type: element
+                                class: data
+                                tagName: div
+                                textContent: $
+                                type: element
+                            class: booking_fee
+                            tagName: li
+                            type: element
+                          - children:
+                              - children:
+                                  - content: 'TOTAL PRICE:'
+                                    type: text
+                                class: label
+                                tagName: div
+                                textContent: 'TOTAL PRICE:'
+                                type: element
+                              - children:
+                                  - content: $
+                                    type: text
+                                  - class: total_purchase_price
+                                    tagName: span
+                                    type: element
+                                class: data
+                                tagName: div
+                                textContent: $
+                                type: element
+                            class: total_price
+                            tagName: li
+                            type: element
+                        tagName: ul
+                        type: element
+                      - checked: false
+                        disabled: false
+                        name: terms
+                        readOnly: false
+                        tagName: input
+                        type: checkbox
+                        value: 'on'
+                      - aria-checked: 'false'
+                        class: checkbox-indicator
+                        role: checkbox
+                        tabindex: '0'
+                        tagName: div
+                        type: element
+                      - - children:
+                            - content: With this purchase, I agree that 1) no ticket refunds will be granted after this purchase unless the screening is canceled or rescheduled; 2) while purchasing tickets online guarantees you a seat, this event is general admission and seat selection is on a first-come, first-served basis; and, 3) to The Brattle Theatre’s
+                              type: text
+                          tagName: span
+                          textContent: With this purchase, I agree that 1) no ticket refunds will be granted after this purchase unless the screening is canceled or rescheduled; 2) while purchasing tickets online guarantees you a seat, this event is general admission and seat selection is on a first-come, first-served basis; and, 3) to The Brattle Theatre’s
+                          type: element
+                        - children:
+                            - children:
+                                - content: Policies
+                                  type: text
+                              tagName: span
+                              textContent: Policies
+                              type: element
+                          href: https://brattlefilm.org/about/policies/
+                          tagName: a
+                          type: element
+                        - children:
+                            - content: and Filmbot ticketing system's
+                              type: text
+                          tagName: span
+                          textContent: and Filmbot ticketing system's
+                          type: element
+                        - children:
+                            - children:
+                                - content: Privacy Policy
+                                  type: text
+                              tagName: span
+                              textContent: Privacy Policy
+                              type: element
+                          href: https://filmbot.com/privacy-policy/
+                          tagName: a
+                          type: element
+                        - children:
+                            - content: '&'
+                              type: text
+                          tagName: span
+                          textContent: '&'
+                          type: element
+                        - children:
+                            - children:
+                                - content: Terms of Service
+                                  type: text
+                              tagName: span
+                              textContent: Terms of Service
+                              type: element
+                          href: https://filmbot.com/terms-of-service/
+                          tagName: a
+                          type: element
+                        - children:
+                            - content: .
+                              type: text
+                          tagName: span
+                          textContent: .
+                          type: element
+                      - children:
+                          - content: PLEASE AGREE TO THE TERMS
+                            type: text
+                        class: error-message
+                        role: alert
+                        tagName: div
+                        textContent: PLEASE AGREE TO THE TERMS
+                        type: element
+                      - class: error-message submit-error
+                        role: alert
+                        tagName: div
+                        type: element
+                      - checked: false
+                        disabled: false
+                        id: submit-purchase
+                        readOnly: false
+                        tagName: input
+                        type: submit
+                        value: PURCHASE
+                      - aria-hidden: 'true'
+                        children:
+                          - aria-hidden: 'true'
+                            children:
+                              - content: '*'
+                                type: text
+                            tagName: span
+                            textContent: '*'
+                            type: element
+                          - content: Required field
+                            type: text
+                        class: required-description
+                        tagName: p
+                        textContent: Required field
+                        type: element
+                    id: payment-details
+                    tagName: form
+                    type: element
+                class: checkout-container
+                tagName: section
+                type: element
+            id: checkout
+            tagName: section
+            type: element
+          - children:
+              - children:
+                  - children:
+                      - content: Purchase Complete
+                        type: text
+                    tagName: h1
+                    textContent: Purchase Complete
+                    type: element
+                class: page-header
+                tagName: header
+                type: element
+              - children:
+                  - children:
+                      - content: 'Order ID:'
+                        type: text
+                      - id: order-id
+                        tagName: span
+                        type: element
+                    class: order-id
+                    tagName: p
+                    textContent: 'Order ID:'
+                    type: element
+                  - children:
+                      - content: 'Receipt emailed to:'
+                        type: text
+                      - class: order-email
+                        tagName: span
+                        type: element
+                      - content: .
+                        type: text
+                    class: email-confirmation desktop-only
+                    tagName: p
+                    textContent: 'Receipt emailed to: .'
+                    type: element
+                  - class: print-instructions
+                    tagName: p
+                    type: element
+                  - children:
+                      - content: Please bring this email confirmation, either printed out or on your phone, to be scanned for entry.
+                        type: text
+                    tagName: strong
+                    textContent: Please bring this email confirmation, either printed out or on your phone, to be scanned for entry.
+                    type: element
+                  - children:
+                      - content: For directions and parking information,
+                        type: text
+                      - children:
+                          - content: click here
+                            type: text
+                        href: https://brattlefilm.org/location/
+                        tagName: a
+                        textContent: click here
+                        type: element
+                    tagName: p
+                    textContent: For directions and parking information,
+                    type: element
+                  - tagName: p
+                    type: element
+                  - tagName: p
+                    type: element
+                  - tagName: p
+                    type: element
+                  - - children:
+                        - alt: Poster for The Sacrifice
+                          class: attachment-full size-full wp-post-image
+                          decoding: async
+                          height: '2560'
+                          loading: lazy
+                          sizes: '(max-width: 1707px) 100vw, 1707px'
+                          src: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-scaled.jpg
+                          srcset: https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-scaled.jpg 1707w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-200x300.jpg 200w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-683x1024.jpg 683w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-768x1152.jpg 768w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-1024x1536.jpg 1024w, https://s3.amazonaws.com/nightjarprod/content/uploads/sites/192/2024/12/11151909/8JMh27z075ZHbFE85XYkdXF2QkK-1365x2048.jpg 1365w
+                          tagName: img
+                          type: element
+                          width: '1707'
+                      href: https://brattlefilm.org/movies/the-sacrifice/
+                      tagName: a
+                      type: element
+                    - - children:
+                          - children:
+                              - children:
+                                  - content: 'Movie:'
+                                    type: text
+                                class: label
+                                tagName: span
+                                textContent: 'Movie:'
+                                type: element
+                              - children:
+                                  - content: The Sacrifice
+                                    type: text
+                                href: https://brattlefilm.org/movies/the-sacrifice/
+                                tagName: a
+                                textContent: The Sacrifice
+                                type: element
+                            class: show_title
+                            tagName: li
+                            type: element
+                          - children:
+                              - children:
+                                  - content: 'Date:'
+                                    type: text
+                                class: label
+                                tagName: span
+                                textContent: 'Date:'
+                                type: element
+                              - children:
+                                  - content: Mon,  Jan 6
+                                    type: text
+                                class: data
+                                tagName: span
+                                textContent: Mon,  Jan 6
+                                type: element
+                            class: show_date
+                            tagName: li
+                            type: element
+                          - children:
+                              - children:
+                                  - content: 'Time:'
+                                    type: text
+                                class: label
+                                tagName: span
+                                textContent: 'Time:'
+                                type: element
+                              - children:
+                                  - content: 8:00 pm
+                                    type: text
+                                class: data
+                                tagName: span
+                                textContent: 8:00 pm
+                                type: element
+                            class: show_time
+                            tagName: li
+                            type: element
+                          - children:
+                              - children:
+                                  - content: 'Theater:'
+                                    type: text
+                                class: label
+                                tagName: span
+                                textContent: 'Theater:'
+                                type: element
+                              - children:
+                                  - content: The Brattle
+                                    type: text
+                                class: data
+                                tagName: span
+                                textContent: The Brattle
+                                type: element
+                            class: show_theater
+                            tagName: li
+                            type: element
+                          - children:
+                              - children:
+                                  - content: 'Address:'
+                                    type: text
+                                class: label
+                                tagName: span
+                                textContent: 'Address:'
+                                type: element
+                              - children:
+                                  - content: |-
+                                      40 Brattle St.
+                                      Cambridge, MA 02138
+                                    type: text
+                                href: https://maps.google.com/?q=40%20Brattle%20St.Cambridge,%20MA%2002138
+                                tagName: a
+                                target: _blank
+                                textContent: |-
+                                  40 Brattle St.
+                                  Cambridge, MA 02138
+                                type: element
+                            class: show_theater_address
+                            tagName: li
+                            type: element
+                        tagName: ul
+                        type: element
+                      - - children:
+                            - content: The Brattle Theatre does not generally provide advisories about subject matter or potentially triggering content in films, as sensitivities vary from person to person. In addition to the synopses, trailers, and other links on our website, further information about content and age-appropriateness for specific films can be found on
+                              type: text
+                          tagName: span
+                          textContent: The Brattle Theatre does not generally provide advisories about subject matter or potentially triggering content in films, as sensitivities vary from person to person. In addition to the synopses, trailers, and other links on our website, further information about content and age-appropriateness for specific films can be found on
+                          type: element
+                        - children:
+                            - children:
+                                - content: Common Sense Media
+                                  type: text
+                              tagName: span
+                              textContent: Common Sense Media
+                              type: element
+                          href: https://www.commonsensemedia.org/
+                          tagName: a
+                          type: element
+                        - children:
+                            - content: ','
+                              type: text
+                          tagName: span
+                          textContent: ','
+                          type: element
+                        - children:
+                            - children:
+                                - content: IMDb
+                                  type: text
+                              tagName: span
+                              textContent: IMDb
+                              type: element
+                          href: https://www.imdb.com/
+                          tagName: a
+                          type: element
+                        - children:
+                            - content: ', and'
+                              type: text
+                          tagName: span
+                          textContent: ', and'
+                          type: element
+                        - children:
+                            - children:
+                                - content: DoesTheDogDie.com
+                                  type: text
+                              tagName: span
+                              textContent: DoesTheDogDie.com
+                              type: element
+                          href: http://doesthedogdie.com
+                          tagName: a
+                          type: element
+                        - children:
+                            - content: as well as through general internet searches.
+                              type: text
+                          tagName: span
+                          textContent: as well as through general internet searches.
+                          type: element
+                  - children:
+                      - children:
+                          - children:
+                              - content: 'Tickets:'
+                                type: text
+                            class: label
+                            tagName: div
+                            textContent: 'Tickets:'
+                            type: element
+                          - tagName: span
+                            type: element
+                        class: tickets
+                        tagName: li
+                        type: element
+                      - children:
+                          - children:
+                              - content: 'Booking Fee:'
+                                type: text
+                            class: label
+                            tagName: div
+                            textContent: 'Booking Fee:'
+                            type: element
+                          - children:
+                              - content: $
+                                type: text
+                              - class: booking_fee_total
+                                tagName: span
+                                type: element
+                            class: data
+                            tagName: div
+                            textContent: $
+                            type: element
+                        class: booking_fee
+                        tagName: li
+                        type: element
+                      - children:
+                          - children:
+                              - content: 'TOTAL PRICE:'
+                                type: text
+                            class: label
+                            tagName: div
+                            textContent: 'TOTAL PRICE:'
+                            type: element
+                          - children:
+                              - content: $
+                                type: text
+                              - class: total_purchase_price
+                                tagName: span
+                                type: element
+                            class: data
+                            tagName: div
+                            textContent: $
+                            type: element
+                        class: total_price
+                        tagName: li
+                        type: element
+                    tagName: ul
+                    type: element
+                  - children:
+                      - content: 'Receipt emailed to:'
+                        type: text
+                      - class: order-email
+                        tagName: span
+                        type: element
+                      - content: .
+                        type: text
+                    class: email-confirmation mobile-only
+                    tagName: p
+                    textContent: 'Receipt emailed to: .'
+                    type: element
+                  - tagName: br
+                    type: element
+                  - children:
+                      - content: Your ticket purchase is complete. Thank you from all of us at The Brattle!
+                        type: text
+                    tagName: p
+                    textContent: Your ticket purchase is complete. Thank you from all of us at The Brattle!
+                    type: element
+                  - children:
+                      - content: Please contact us at info@brattlefilm.org or 617-876-6837 if you have any questions.
+                        type: text
+                    tagName: p
+                    textContent: Please contact us at info@brattlefilm.org or 617-876-6837 if you have any questions.
+                    type: element
+                  - children:
+                      - content: We look forward to seeing you soon!
+                        type: text
+                    tagName: p
+                    textContent: We look forward to seeing you soon!
+                    type: element
+                  - children:
+                      - content: 'Please note: all ticket purchases are final sale and non-refundable.'
+                        type: text
+                    tagName: strong
+                    textContent: 'Please note: all ticket purchases are final sale and non-refundable.'
+                    type: element
+                class: confirmation-container
+                tagName: section
+                type: element
+            id: order-confirmation
+            tagName: section
+            type: element
+        class: main-content narrow-margin
+        tagName: section
+        type: element
+    class: 'site-main wrap '
+    id: main
+    role: main
+    tagName: main
+    type: element
+  - children:
+      - children:
+          - children:
+              - children:
+                  - children:
+                      - content: The Brattle Film Foundation
+                        type: text
+                    href: https://brattlefilm.org/about/the-brattle-film-foundation/
+                    tagName: a
+                    textContent: The Brattle Film Foundation
+                    type: element
+                class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12556
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - content: Location & Accessibility
+                        type: text
+                    href: https://brattlefilm.org/location/
+                    tagName: a
+                    textContent: Location & Accessibility
+                    type: element
+                class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12869
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - content: Contact & Connect
+                        type: text
+                    href: https://brattlefilm.org/about/contact-2/
+                    tagName: a
+                    textContent: Contact & Connect
+                    type: element
+                class: menu-item menu-item-type-post_type menu-item-object-page menu-item-12528
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - content: Policies
+                        type: text
+                    href: https://brattlefilm.org/about/policies/
+                    tagName: a
+                    textContent: Policies
+                    type: element
+                class: menu-item menu-item-type-post_type menu-item-object-page menu-item-698349
+                tagName: li
+                type: element
+              - children:
+                  - children:
+                      - content: Subscribe to Our Email Newsletter
+                        type: text
+                    href: https://mailchi.mp/brattlefilm/email-subscriber-form
+                    tagName: a
+                    textContent: Subscribe to Our Email Newsletter
+                    type: element
+                class: menu-item menu-item-type-custom menu-item-object-custom menu-item-698597
+                tagName: li
+                type: element
+            class: menu
+            id: menu-footer-1
+            tagName: ul
+            type: element
+        id: footer-nav
+        tagName: nav
+        type: element
+      - children:
+          - content: Copyright © 2025
+            type: text
+        class: footer-copyright
+        tagName: span
+        textContent: Copyright © 2025
+        type: element
+    id: footer-container
+    tagName: footer
+    type: element
+  - class: modal-backdrop
+    tagName: div
+    type: element
+  - - - class: loader__figure
+        tagName: div
+        type: element
+      - class: iframe-holder-inner
+        tagName: div
+        type: element
+    - class: close-modal
+      role: button
+      tabindex: '0'
+      tagName: div
+      type: element
+  - children:
+      - content: powered by
+        type: text
+      - children:
+          - content: Filmbot
+            type: text
+        tagName: span
+        textContent: Filmbot
+        type: element
+    href: https://filmbot.com/?utm_source=192&utm_medium=footer_link&utm_campaign=powered_by
+    id: powered-by-filmbot
+    tagName: a
+    target: _blank
+    textContent: powered by
+    type: element
+class: archive wp-custom-logo checkout inverted-badges
+data-background-type: color
+tagName: body
+type: element
