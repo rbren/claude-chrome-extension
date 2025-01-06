@@ -28,7 +28,7 @@ function toYAML(obj, indent = 0) {
 }
 
 function addMessage(text, type = 'user') {
-    const chatContainer = document.getElementById('chat-container');
+    const chatContainer = document.querySelector('.chat-container');
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${type}-message`;
     messageDiv.textContent = text;
@@ -38,7 +38,7 @@ function addMessage(text, type = 'user') {
 }
 
 function addLoadingMessage() {
-    const chatContainer = document.getElementById('chat-container');
+    const chatContainer = document.querySelector('.chat-container');
     const loadingDiv = document.createElement('div');
     loadingDiv.className = 'message loading-message';
     loadingDiv.innerHTML = `
@@ -102,6 +102,63 @@ document.addEventListener('DOMContentLoaded', function() {
     const additionalPromptInput = document.getElementById('additionalPrompt');
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
+
+    async function handleSend() {
+        const prompt = userInput.value.trim();
+        if (!prompt) return;
+
+        // Check settings
+        if (!litellmKeyInput.value || !litellmUrlInput.value || !litellmModelInput.value) {
+            addMessage('Please fill in all settings fields (API Key, URL, and Model)', 'error');
+            return;
+        }
+
+        // Add user message and loading indicator
+        addMessage(prompt);
+        const loadingMessage = addLoadingMessage();
+        userInput.value = '';
+        sendButton.disabled = true;
+
+        try {
+            // Get the accessibility tree
+            const accessibilityTree = await new Promise((resolve) => {
+                // First inject accessibility.js
+                chrome.tabs.executeScript({
+                    file: 'accessibility.js'
+                }, () => {
+                    // Then execute the tree building
+                    executeInTab(`AccessibilityTree.buildAccessibilityTree()`, (result) => {
+                        if (result.success) {
+                            resolve(result.result);
+                        } else {
+                            console.error('Error getting accessibility tree:', result.error);
+                            resolve(null);
+                        }
+                    });
+                });
+            });
+
+            // Convert to YAML
+            const yamlOutput = toYAML(accessibilityTree);
+            addMessage(yamlOutput, 'system');
+        } catch (error) {
+            addMessage('Error: ' + error.message, 'error');
+        } finally {
+            loadingMessage.remove();
+            sendButton.disabled = false;
+        }
+    }
+
+    // Handle send button click
+    sendButton.addEventListener('click', handleSend);
+
+    // Handle Enter key
+    userInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
+        }
+    });
 
     // Tab switching logic
     tabs.forEach(tab => {
