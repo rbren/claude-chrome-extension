@@ -385,8 +385,10 @@ Make your JavaScript as general as possible. It should be able to handle ambigui
 like escaped characters, missing elements, etc.
 
 DO NOT assume anything about the page other than what you see in the accessibility tree.
-Other tags, data attributes, etc should not be assumed to exist. Use string matching
-liberally to process text content.
+Other tags, data attributes, etc should not be assumed to exist.
+
+When possible, use controls present on the page to search, filter, etc. If you need to,
+use string matching to process text content.
 </TASK>
 `
 
