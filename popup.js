@@ -481,6 +481,11 @@ Other tags, data attributes, etc should not be assumed to exist.
 When possible, use controls present on the page to search, filter, etc. If you need to,
 use string matching to process text content.
 
+When asked to perform an action that will likely have side effects (e.g.
+submitting a form), be sure that you've been explicitly instructed to do so.
+E.g. if a user just says "fill out a form" don't submit the form unless they explicitly
+ask you to.
+
 ${additionalPromptInput.value ? `<ADDITIONAL_INSTRUCTIONS>\n${additionalPromptInput.value}\n</ADDITIONAL_INSTRUCTIONS>` : ''}
 </TASK>
 `
