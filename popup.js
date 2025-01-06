@@ -167,7 +167,49 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             // Convert to YAML
             const yamlOutput = toYAML(accessibilityTree);
-            addMessage(yamlOutput, 'system');
+
+            // Send to LLM
+            const response = await fetch(litellmUrlInput.value, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${litellmKeyInput.value}`
+                },
+                body: JSON.stringify({
+                    model: litellmModelInput.value,
+                    messages: [
+                        {
+                            role: "system",
+                            content: "You are an accessibility expert. Analyze the accessibility tree provided and give specific, actionable feedback about accessibility issues and how to fix them."
+                        },
+                        ...(additionalPromptInput.value.trim() ? [{
+                            role: "system",
+                            content: additionalPromptInput.value.trim()
+                        }] : []),
+                        {
+                            role: "user",
+                            content: userInput.value.trim()
+                        },
+                        {
+                            role: "system",
+                            content: "Here is the accessibility tree in YAML format:\n\n" + yamlOutput
+                        }
+                    ],
+                    temperature: 0.7,
+                    stream: false
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+                throw new Error('Invalid response from API');
+            }
+
+            addMessage(data.choices[0].message.content, 'system');
         } catch (error) {
             addMessage('Error: ' + error.message, 'error');
         } finally {
