@@ -98,21 +98,31 @@ function getAccessibilityTree(element = document.body) {
         // Skip comment nodes and empty text nodes
         if (node.nodeType === Node.COMMENT_NODE || 
             (node.nodeType === Node.TEXT_NODE && !node.textContent.trim())) {
+            console.log('Skipping node: Comment or empty text');
             return false;
         }
 
         if (node.nodeType === Node.ELEMENT_NODE) {
             const tagName = node.tagName.toLowerCase();
-            const style = getComputedStyle(node);
+            console.log('Checking element:', tagName);
+            
+            try {
+                const style = getComputedStyle(node);
 
-            // Skip hidden elements
-            if (style.display === 'none' || style.visibility === 'hidden') {
-                return false;
-            }
+                // Skip hidden elements
+                if (style.display === 'none' || style.visibility === 'hidden') {
+                    console.log('Skipping hidden element:', tagName);
+                    return false;
+                }
 
-            // Skip script, style, meta tags
-            if (['script', 'style', 'meta', 'link', 'noscript'].includes(tagName)) {
-                return false;
+                // Skip script, style, meta tags
+                if (['script', 'style', 'meta', 'link', 'noscript'].includes(tagName)) {
+                    console.log('Skipping excluded tag:', tagName);
+                    return false;
+                }
+            } catch (e) {
+                console.error('Error checking style for', tagName, ':', e);
+                // Don't skip the node if we can't check its style
             }
         }
 
@@ -123,6 +133,9 @@ function getAccessibilityTree(element = document.body) {
     function isSimpleContainer(node) {
         if (node.nodeType !== Node.ELEMENT_NODE) return false;
         
+        const tagName = node.tagName.toLowerCase();
+        console.log('Checking if simple container:', tagName);
+        
         // Never treat semantic elements as simple containers
         const semanticElements = [
             'main', 'nav', 'article', 'section', 'aside', 'header', 'footer',
@@ -130,48 +143,67 @@ function getAccessibilityTree(element = document.body) {
             'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
             'ul', 'ol', 'li', 'table', 'tr', 'td', 'th'
         ];
-        if (semanticElements.includes(node.tagName.toLowerCase())) return false;
+        if (semanticElements.includes(tagName)) {
+            console.log('Not a simple container - semantic element:', tagName);
+            return false;
+        }
         
         // Skip if node has meaningful properties
         const props = getAccessibleProperties(node);
-        if (Object.keys(props).length > 0) return false;
+        if (Object.keys(props).length > 0) {
+            console.log('Not a simple container - has properties:', tagName, props);
+            return false;
+        }
 
         // Skip if node has text content directly
         const hasDirectText = Array.from(node.childNodes).some(child => 
             child.nodeType === Node.TEXT_NODE && child.textContent.trim());
-        if (hasDirectText) return false;
+        if (hasDirectText) {
+            console.log('Not a simple container - has direct text:', tagName);
+            return false;
+        }
 
+        console.log('Is a simple container:', tagName);
         return true;
     }
 
     // Main recursive function to build the tree
     function buildTree(node) {
+        console.log('Building tree for:', node.nodeType === Node.ELEMENT_NODE ? node.tagName : 'text/comment');
+        
         if (!shouldIncludeNode(node)) {
+            console.log('Node excluded by shouldIncludeNode');
             return null;
         }
 
         // For text nodes, just return the trimmed content if not empty
         if (node.nodeType === Node.TEXT_NODE) {
             const text = node.textContent.trim();
+            console.log('Text node:', text ? 'has content' : 'empty');
             return text ? { type: 'text', content: text } : null;
         }
 
         // Process children first
+        console.log('Processing children of:', node.tagName);
         let children = Array.from(node.childNodes)
             .map(buildTree)
             .filter(child => child !== null);
+        console.log('Found children:', children.length);
 
         // For simple container elements, just return their children
         if (isSimpleContainer(node) && children.length > 0) {
+            console.log('Returning children of simple container:', node.tagName);
             return children.length === 1 ? children[0] : children;
         }
 
         // For element nodes, build the node structure
+        console.log('Building element node:', node.tagName);
         const accessibleNode = {
             type: 'element',
             tagName: node.tagName.toLowerCase(),
             ...getAccessibleProperties(node)
         };
+        console.log('Node properties:', accessibleNode);
 
         // Only include children if there are any
         if (children.length > 0) {
@@ -186,6 +218,7 @@ function getAccessibilityTree(element = document.body) {
                 return true;
             });
             accessibleNode.children = children;
+            console.log('Added children to node:', node.tagName);
         }
 
         return accessibleNode;
@@ -303,18 +336,40 @@ document.addEventListener('DOMContentLoaded', function() {
         try {
             // First get the accessibility tree
             const accessibilityTree = await new Promise((resolve) => {
+                const debugCode = `
+                    try {
+                        console.log("Starting to build accessibility tree...");
+                        const treeFunc = ${getAccessibilityTree.toString()};
+                        console.log("Tree function defined");
+                        const tree = treeFunc();
+                        console.log("Tree built:", tree ? "success" : "null");
+                        if (!tree) {
+                            console.log("Document body:", document.body ? "exists" : "null");
+                            console.log("First level children:", document.body ? Array.from(document.body.children).map(c => c.tagName).join(", ") : "N/A");
+                        }
+                        tree;  // Return value for executeScript
+                    } catch (e) {
+                        console.error("Error building tree:", e);
+                        throw e;
+                    }
+                `;
                 chrome.tabs.executeScript({
-                    code: `const tree = (${getAccessibilityTree.toString()})();
-                        tree;`
+                    code: debugCode
                 }, function(results) {
                     if (chrome.runtime.lastError) {
                         console.error('Error getting accessibility tree:', chrome.runtime.lastError);
                         resolve(null);
                     } else {
+                        console.log('Tree script executed, result:', results ? results[0] : 'no results');
                         resolve(results[0]);
                     }
                 });
             });
+            
+            if (!accessibilityTree) {
+                throw new Error('Failed to generate accessibility tree. Check the console for debug information.');
+            }
+            
             let a11yTree = toYAML(accessibilityTree);
             if (a11yTree.length > 100000) {
                 a11yTree = a11yTree.slice(0, 100000) + '\n...';
